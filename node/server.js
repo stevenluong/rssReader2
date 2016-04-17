@@ -12,9 +12,23 @@ var socket = io.listen(server);
 
 // READ RSS
 // TODO get sources from ROR
-var sources = config.sources;
-main();
-function main(){
+http.get('http://localhost:3000/sources.json', (res) => {
+		var body = '';
+		res.on('data', function(chunk){
+			body += chunk;
+		});
+		res.on('end', function(){
+			var sources = JSON.parse(body);
+			console.log(sources);
+			main(sources);
+		});
+		//var sources = config.sources;
+		//console.log(res);
+		//res.resume();
+		}).on('error', (e) => {
+	console.log(`Got error: ${e.message}`);
+});
+function main(sources){
 	readAll(sources);
 	setInterval(function(){
 		console.log('Read-'+parseDate(new Date))
@@ -25,10 +39,12 @@ function main(){
 function readAll(sources){
 	//console.log('Reading RSS ...');
 	sources.forEach(function(source){
-		readRSS(source.id,source.url);
+		readRSS(source.name,source.rss_url);
 	});
 };
 function readRSS(sourceName,sourceLink){
+	console.log(sourceLink);
+	console.log(sourceName);
 	var feedparser = new FeedParser();
 	var req = request(sourceLink);
 	req.on('error', done);
@@ -142,36 +158,36 @@ function ror_post(news){
 	};
 	var str = '';
 
-    http.request(options, function(res) {
-			res.setEncoding('utf8');
-			res.on('data', function(data) {
-				str += data;
-			});
+	http.request(options, function(res) {
+		res.setEncoding('utf8');
+		res.on('data', function(data) {
+			str += data;
+		});
 
-			res.on('end', function() {
-				console.log(str);
-			})
-
-			res.on('error', function(error) {
-				console.log(error);
-			})
+		res.on('end', function() {
+			console.log(str);
 		})
+
+		res.on('error', function(error) {
+			console.log(error);
+		})
+	})
 	.end(dataStr);
 }
 function normalize(title){
 	var space = title.replace(/[î]/g,"i").replace(/[à]/g,"a").replace(/[ô]/g,"o").replace(/[éèê]/g,"e").replace(/[^a-zA-Z]/g," ").toLowerCase(); 
 	/*
-	var split = space.split(' '); 
-	var norm = ""; 
-	split.forEach(function(i){ 
-		if(i.length>2){ 
-			if(norm==""){ 
-				norm = i; 
-			}else{ 
-				norm = norm +" "+i; 
-			} 
-		} 
-	}); 
-	*/
+	   var split = space.split(' '); 
+	   var norm = ""; 
+	   split.forEach(function(i){ 
+	   if(i.length>2){ 
+	   if(norm==""){ 
+	   norm = i; 
+	   }else{ 
+	   norm = norm +" "+i; 
+	   } 
+	   } 
+	   }); 
+	   */
 	return space; 
 }

@@ -3,11 +3,11 @@
 one:
   name: MyString
   display: false
-  lang: MyString
-  url: MyString
+  language: MyString
+  rss_url: MyString
 
 two:
   name: MyString
   display: false
-  lang: MyString
-  url: MyString
+  language: MyString
+  rss_url: MyString

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160405014215) do
+ActiveRecord::Schema.define(version: 20160417015245) do
 
   create_table "news", force: :cascade do |t|
     t.datetime "date"
@@ -25,8 +25,8 @@ ActiveRecord::Schema.define(version: 20160405014215) do
   create_table "sources", force: :cascade do |t|
     t.string   "name"
     t.boolean  "display"
-    t.string   "lang"
-    t.string   "url"
+    t.string   "language"
+    t.string   "rss_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
