@@ -1,0 +1,40 @@
+<div class="row">
+	<div class="col-md-3 col-md-push-9">
+		<p>
+		Search:<br/> <input ng-model="query">
+		</p>
+		<p>
+		Sources:
+		</p>
+		<div ng-repeat="s in sources | orderBy:'name'">
+			<label>{{s.name}}:
+				<input type="checkbox" ng-model="checkboxModel[s.name]" ng-checked="checkboxModel[s.name]"/>
+		</label><br/>
+		</div>
+		<p>
+		Total: {{news.length}}
+		</p>
+	</div>
+	<div class="col-md-9 col-md-pull-3">
+		<table class="table table-striped">
+			<th>Date</th>
+			<th>Source</th>
+			<th>Image</th>
+			<th>Title</th>
+			<tr ng-repeat="n in news | filter:query | sourcesFilter:this | orderBy:'-date'">
+				<td>{{n.date.substring(0,4)+'-'+n.date.substring(5,7)+'-'+n.date.substring(8,10)}}</td>
+				<td>{{n.source}}</td>
+				<td>
+					<div ng-if="n.img !=''"><a href="{{n.link}}" target="_blank"><img ng-src="{{n.img}}" height="45"/></a></div>
+					<div ng-if="n.img ==''">-</div>
+				</td>
+				<td><a href="{{n.link}}" target="_blank">{{n.title}}</a></td>
+			</tr>
+		</table>
+	</div>
+
+</div><!--ROW-->
+
+
+
+
