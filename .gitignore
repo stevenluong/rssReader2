@@ -1,4 +1,5 @@
 http/bower_components/
+http/node_modules/
 ror/log/
 node/bower_components/
 node/node_modules/
