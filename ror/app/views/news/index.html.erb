@@ -5,10 +5,13 @@
 <table>
   <thead>
     <tr>
+      <th>Title</th>
+      <th>Guid</th>
+      <th>Link</th>
       <th>Date</th>
       <th>Source</th>
-      <th>Image</th>
-      <th>Title</th>
+      <th>Image link</th>
+      <th>Description</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -16,10 +19,13 @@
   <tbody>
     <% @news.each do |news| %>
       <tr>
+        <td><%= news.title %></td>
+        <td><%= news.guid %></td>
+        <td><%= news.link %></td>
         <td><%= news.date %></td>
         <td><%= news.source %></td>
-        <td><%= news.image %></td>
-        <td><%= news.title %></td>
+        <td><%= news.image_link %></td>
+        <td><%= news.description %></td>
         <td><%= link_to 'Show', news %></td>
         <td><%= link_to 'Edit', edit_news_path(news) %></td>
         <td><%= link_to 'Destroy', news, method: :delete, data: { confirm: 'Are you sure?' } %></td>

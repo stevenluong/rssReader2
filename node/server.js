@@ -31,7 +31,7 @@ http.get('http://localhost:3000/sources.json', (res) => {
 function main(sources){
 	readAll(sources);
 	setInterval(function(){
-		console.log('Read-'+parseDate(new Date))
+		//console.log('Read-'+parseDate(new Date))
 			readAll(sources);
 	},30*1000);
 }
@@ -43,8 +43,8 @@ function readAll(sources){
 	});
 };
 function readRSS(sourceName,sourceLink){
-	console.log(sourceLink);
-	console.log(sourceName);
+	//console.log(sourceLink);
+	//console.log(sourceName);
 	var feedparser = new FeedParser();
 	var req = request(sourceLink);
 	req.on('error', done);
@@ -64,10 +64,10 @@ function readRSS(sourceName,sourceLink){
 			if(item.enclosures[0]!=undefined){
 				img = item.enclosures[0].url;
 			};
-			var rssitem = {guid:item.guid,title:item.title,link:item.link,date:newDate,source:sourceName, img:img, description:item.description};
-			var key = 'items:'+newDate+':'+sourceName;
+			var key = newDate+':'+sourceName;
+			var rssitem = {guid:key,title:item.title,link:item.link,date:newDate,source:sourceName, image_link:img, description:item.description};
 			//console.log(key);
-			//console.log(rssitem);
+			console.log(rssitem);
 			//console.log(item);
 			ror_post(rssitem);
 			//TODO STRAIGHT UPDATE OF CLIENT

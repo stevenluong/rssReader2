@@ -18,7 +18,7 @@ class NewsControllerTest < ActionController::TestCase
 
   test "should create news" do
     assert_difference('News.count') do
-      post :create, news: { date: @news.date, image: @news.image, source: @news.source, title: @news.title }
+      post :create, news: { date: @news.date, description: @news.description, guid: @news.guid, image_link: @news.image_link, link: @news.link, source: @news.source, title: @news.title }
     end
 
     assert_redirected_to news_path(assigns(:news))
@@ -35,7 +35,7 @@ class NewsControllerTest < ActionController::TestCase
   end
 
   test "should update news" do
-    patch :update, id: @news, news: { date: @news.date, image: @news.image, source: @news.source, title: @news.title }
+    patch :update, id: @news, news: { date: @news.date, description: @news.description, guid: @news.guid, image_link: @news.image_link, link: @news.link, source: @news.source, title: @news.title }
     assert_redirected_to news_path(assigns(:news))
   end
 

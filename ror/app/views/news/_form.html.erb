@@ -12,6 +12,18 @@
   <% end %>
 
   <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :guid %><br>
+    <%= f.text_field :guid %>
+  </div>
+  <div class="field">
+    <%= f.label :link %><br>
+    <%= f.text_field :link %>
+  </div>
+  <div class="field">
     <%= f.label :date %><br>
     <%= f.datetime_select :date %>
   </div>
@@ -20,12 +32,12 @@
     <%= f.text_field :source %>
   </div>
   <div class="field">
-    <%= f.label :image %><br>
-    <%= f.text_field :image %>
+    <%= f.label :image_link %><br>
+    <%= f.text_field :image_link %>
   </div>
   <div class="field">
-    <%= f.label :title %><br>
-    <%= f.text_field :title %>
+    <%= f.label :description %><br>
+    <%= f.text_field :description %>
   </div>
   <div class="actions">
     <%= f.submit %>
