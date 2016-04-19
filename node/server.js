@@ -1,19 +1,21 @@
 var http = require('http');
-var io = require('socket.io');
+//var io = require('socket.io');
 var request = require('request');
 var FeedParser = require('feedparser');
 
-var config = require('./config.json');
+//var config = require('./config.json');
 
 var server = http.createServer();
-server.listen(3030);
-var socket = io.listen(server);
+//server.listen(3030);
+//var socket = io.listen(server);
 
+//var server_url = "localhost:3000";
+var server_url = "slapps.fr/rssReader2/ror";
 
 // READ RSS
 // TODO get sources from ROR
 
-http.get('http://localhost:3000/sources.json', (res) => {
+http.get('http://'+server_url+'/sources.json', (res) => {
 		var body = '';
 		res.on('data', function(chunk){
 			body += chunk;
@@ -117,9 +119,9 @@ function ror_post(key,title,link,image_link,date,source, description){
 	};
 	var dataStr = JSON.stringify(data);
 	var options = {
-		host: 'localhost',
-		path: '/news.json',
-		port: '3000',
+		host: "slapps.fr",
+		port: 80,
+		path: '/rssReader2/ror/news.json',
 		method: 'POST',
 		headers: {
 			'Content-Length': dataStr.length,
@@ -143,6 +145,7 @@ function ror_post(key,title,link,image_link,date,source, description){
 		})
 	})
 	req.on('error',function(e){
+		console.log(e);
 		console.log("SLerror");
 	});
 	req.end(dataStr);
