@@ -12,6 +12,7 @@ var socket = io.listen(server);
 
 // READ RSS
 // TODO get sources from ROR
+
 http.get('http://localhost:3000/sources.json', (res) => {
 		var body = '';
 		res.on('data', function(chunk){
@@ -20,7 +21,7 @@ http.get('http://localhost:3000/sources.json', (res) => {
 		res.on('end', function(){
 			var sources = JSON.parse(body);
 			console.log(sources);
-			main(sources);
+			readAll(sources);
 		});
 		//var sources = config.sources;
 		//console.log(res);
@@ -28,13 +29,6 @@ http.get('http://localhost:3000/sources.json', (res) => {
 		}).on('error', (e) => {
 	console.log(`Got error: ${e.message}`);
 });
-function main(sources){
-	readAll(sources);
-	setInterval(function(){
-		//console.log('Read-'+parseDate(new Date))
-			readAll(sources);
-	},30*1000);
-}
 
 function readAll(sources){
 	//console.log('Reading RSS ...');
@@ -43,8 +37,6 @@ function readAll(sources){
 	});
 };
 function readRSS(sourceName,sourceLink){
-	//console.log(sourceLink);
-	//console.log(sourceName);
 	var feedparser = new FeedParser();
 	var req = request(sourceLink);
 	req.on('error', done);
@@ -54,7 +46,7 @@ function readRSS(sourceName,sourceLink){
 		stream.pipe(feedparser);
 	});
 	feedparser.on('error', done);
-	feedparser.on('end', done);
+	//feedparser.on('end', done);
 	var counter = 1;
 	feedparser.on('readable', function() {
 		var item;
@@ -65,13 +57,9 @@ function readRSS(sourceName,sourceLink){
 				img = item.enclosures[0].url;
 			};
 			var key = newDate+':'+sourceName;
-			var rssitem = {guid:key,title:item.title,link:item.link,date:newDate,source:sourceName, image_link:img, description:item.description};
-			//console.log(key);
-			console.log(rssitem);
-			//console.log(item);
-			ror_post(rssitem);
+			console.log(sourceName+' - '+item.title);
+			ror_post(key,item.title,item.link,img,newDate,sourceName,"description");
 			//TODO STRAIGHT UPDATE OF CLIENT
-			//socket.emit('item',rssitem);
 		};
 	});
 };
@@ -89,6 +77,7 @@ function parseDate(date){
 
 function done(err){
 	if(err){
+		console.log("SL error");
 		console.log(err,err.stack);
 		return process.exit(1);
 	}
@@ -96,6 +85,7 @@ function done(err){
 	//process.exit();
 }
 // UPDATE CLIENTS
+/*
 socket.on('connection', function (socket) {
 	console.log('connection');
 	socket.emit('connected');
@@ -108,41 +98,21 @@ socket.on('connection', function (socket) {
 		yesterday.setDate(today.getDate() -1);
 		console.log(yesterday);
 		//TODO update client from ROR
-		/*
-		   redisClient.keys('items:'+parseDate(today).substring(0,8)+'*', function(err,keys){
-		//console.log(keys.length);
-		redisClient.keys('items:'+parseDate(yesterday).substring(0,8)+'2*', function(err2,keys2){
-		keys2.forEach(function(key){
-		//console.log(key);
-		redisClient.hmget(key,'date','title','link','source', 'img', function(err,values){
-		socket.emit('item',{date:values[0],title:values[1],link:values[2], source:values[3], img:values[4]});
-		});	
-		});
-		});
-		keys.forEach(function(key){
-		//console.log(key);
-		redisClient.hmget(key,'date','title','link','source', 'img', function(err,values){
-		socket.emit('item',{date:values[0],title:values[1],link:values[2], source:values[3], img:values[4]});
-		});	
-		});
-		});
-		*/
 	});
 
 });
-function ror_post(news){
+*/
+function ror_post(key,title,link,image_link,date,source, description){
 	//TODO normalise title (no é)
-	//var rssitem = {guid:item.guid,title:item.title,link:item.link,date:newDate,source:sourceName, img:img, description:item.description};
-	var title = normalize(news.title);
-	var image = news.img;
-	var date = news.date;
-	var source = news.source;
 	var data = {
 		news: {
+			guid: key,
 			title: normalize(title),
-			image: image,
+			link: link,
+			image_link: image_link,
 			date: date,
-			source: source 
+			source: source,
+			description: normalize(title) 
 		}
 	};
 	var dataStr = JSON.stringify(data);
@@ -158,7 +128,7 @@ function ror_post(news){
 	};
 	var str = '';
 
-	http.request(options, function(res) {
+	var req = http.request(options, function(res) {
 		res.setEncoding('utf8');
 		res.on('data', function(data) {
 			str += data;
@@ -172,22 +142,12 @@ function ror_post(news){
 			console.log(error);
 		})
 	})
-	.end(dataStr);
+	req.on('error',function(e){
+		console.log("SLerror");
+	});
+	req.end(dataStr);
 }
 function normalize(title){
 	var space = title.replace(/[î]/g,"i").replace(/[à]/g,"a").replace(/[ô]/g,"o").replace(/[éèê]/g,"e").replace(/[^a-zA-Z]/g," ").toLowerCase(); 
-	/*
-	   var split = space.split(' '); 
-	   var norm = ""; 
-	   split.forEach(function(i){ 
-	   if(i.length>2){ 
-	   if(norm==""){ 
-	   norm = i; 
-	   }else{ 
-	   norm = norm +" "+i; 
-	   } 
-	   } 
-	   }); 
-	   */
 	return space; 
 }

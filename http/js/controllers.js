@@ -21,13 +21,15 @@ rssReaderControllers.controller('NewsListCtrl', ['$scope','Sources','News',
 			$scope.news = [];
 			$scope.orderProp= "date";
 			News.getLastNews().success(function(response){
-				response.forEach(function(item){
+				response.forEach(function(news){
+					/*
 					var news = {};
 					news.date = item.date;
 					news.source= item.source;
 					news.img= item.image;
 					news.title= item.title;
-					news.link= item.title;
+					news.link= item.link;
+					*/
 					$scope.news.push(news);
 				})
 			});

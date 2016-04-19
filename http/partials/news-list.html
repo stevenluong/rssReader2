@@ -25,8 +25,8 @@
 				<td>{{n.date.substring(0,4)+'-'+n.date.substring(5,7)+'-'+n.date.substring(8,10)}}</td>
 				<td>{{n.source}}</td>
 				<td>
-					<div ng-if="n.img !=''"><a href="{{n.link}}" target="_blank"><img ng-src="{{n.img}}" height="45"/></a></div>
-					<div ng-if="n.img ==''">-</div>
+					<div ng-if="n.image_link !=''"><a href="{{n.link}}" target="_blank"><img ng-src="{{n.image_link}}" height="45"/></a></div>
+					<div ng-if="n.image_link ==''">-</div>
 				</td>
 				<td><a href="{{n.link}}" target="_blank">{{n.title}}</a></td>
 			</tr>

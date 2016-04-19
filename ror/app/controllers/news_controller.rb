@@ -1,3 +1,4 @@
+# coding: utf-8
 class NewsController < ApplicationController
   before_action :set_news, only: [:show, :edit, :update, :destroy]
 
@@ -24,8 +25,12 @@ class NewsController < ApplicationController
   # POST /news
   # POST /news.json
   def create
-    @news = News.new(news_params)
-
+	@news = News.new(news_params)
+	logger.debug @news.guid
+	if News.exists?(:guid => @news.guid)
+		#logger.debug "Exists already" 
+		render plain: "Exists Already - " + @news.title
+	else
     respond_to do |format|
       if @news.save
         format.html { redirect_to @news, notice: 'News was successfully created.' }
@@ -35,6 +40,7 @@ class NewsController < ApplicationController
         format.json { render json: @news.errors, status: :unprocessable_entity }
       end
     end
+	end
   end
 
   # PATCH/PUT /news/1
