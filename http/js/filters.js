@@ -16,4 +16,15 @@ angular.module('rssReaderFilters',[]).filter('sourcesFilter', function(){
 		console.log(filteredNews);
 		return filteredNews;
 		};
+		}).filter('tagFilter', function(){
+		return function(tags,scope){
+		var filteredTags = []
+		tags.forEach(function(t){
+				//TODO make better filter
+				if(t.length>4){
+				filteredTags.push(t)
+				}
+				});
+		return filteredTags;
+		};
 		});

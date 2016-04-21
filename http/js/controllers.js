@@ -19,17 +19,20 @@ rssReaderControllers.controller('NewsListCtrl', ['$scope','Sources','News','Date
 					source.class="btn btn-default";
 					}
 					$scope.sources.push(source);
+					});
 				});
-			});
 			$scope.updateSource = function(s){
-				if(s.display){
-					s.display=false;
-					s.class="btn btn-default";
-				}else{
-					s.display=true;
-					s.class="btn btn-primary";
-				}
+			if(s.display){
+			s.display=false;
+			s.class="btn btn-default";
+			}else{
+			s.display=true;
+			s.class="btn btn-primary";
+			}
 			};
+			$scope.updateSearch = function(w){
+				$scope.query = w;
+			}
 			$scope.news = [];
 			$scope.orderProp= "date";
 			$scope.today=Datetime.toDay(new Date());

@@ -4,7 +4,7 @@
 Today : {{today}}
 </p>
 <p>
-Search:<br/> <input ng-model="query">
+Search:<br/> <input class="form-control" placeholder="#" ng-model="query">
 </p>
 <p>
 Sources:
@@ -15,12 +15,13 @@ Sources:
 Total: {{news.length}}
 </p>
 </div>
-<div class="col-md-9 col-md-pull-3">
+<div class="col-md-9 col-md-pull-3 table-responsive">
 <table class="table table-striped">
 <th>Time</th>
 <th>Source</th>
 <th>Image</th>
 <th>Title</th>
+<th>Tag</th>
 <tr ng-repeat="n in news | filter:query | sourcesFilter:this | orderBy:'-date'">
 <td>{{n.time}}</td>
 <td>{{n.source}}</td>
@@ -29,6 +30,7 @@ Total: {{news.length}}
 <div ng-if="n.image_link ==''">-</div>
 </td>
 <td><a href="{{n.link}}" target="_blank">{{n.title}}</a></td>
+<td><button class="btn btn-default btn-xs" ng-repeat="w in n.title.split(' ') | tagFilter:this" ng-click="updateSearch(w)">#{{w}} </button></td>
 </tr>
 </table>
 </div>

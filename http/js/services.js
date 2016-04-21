@@ -28,7 +28,7 @@ rssReaderServices.factory('Datetime',function($http){
 		return date.substring(0,4)+date.substring(5,7)+date.substring(8,10)+'-'+date.substring(11,13)+date.substring(14,16);
 		};	
 		datetime.ROR_toTime= function(date){
-		return date.substring(11,13)+date.substring(14,16);
+		return date.substring(11,13)+':'+date.substring(14,16);
 		};	
 		datetime.toDay= function(date){
 		var d = ("0" + date.getDate()).slice(-2);
