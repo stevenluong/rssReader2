@@ -7,8 +7,8 @@ var serverSocket = "slapps.fr:3030";
 /* Controllers */
 
 var rssReaderControllers = angular.module('rssReaderControllers', []);
-rssReaderControllers.controller('NewsListCtrl', ['$scope','Sources','News',
-		function($scope, Sources, News) {
+rssReaderControllers.controller('NewsListCtrl', ['$scope','Sources','News','Datetime',
+		function($scope, Sources, News, Datetime) {
 			Sources.getSources().success(function(response){
 				$scope.checkboxModel=[];
 				$scope.sources=[];
@@ -20,16 +20,10 @@ rssReaderControllers.controller('NewsListCtrl', ['$scope','Sources','News',
 
 			$scope.news = [];
 			$scope.orderProp= "date";
+			$scope.today=Datetime.toDay(new Date());
 			News.getLastNews().success(function(response){
 				response.forEach(function(news){
-					/*
-					var news = {};
-					news.date = item.date;
-					news.source= item.source;
-					news.img= item.image;
-					news.title= item.title;
-					news.link= item.link;
-					*/
+					news.time=Datetime.ROR_toTime(news.date);
 					$scope.news.push(news);
 				})
 			});
