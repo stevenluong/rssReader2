@@ -10,14 +10,26 @@ var rssReaderControllers = angular.module('rssReaderControllers', []);
 rssReaderControllers.controller('NewsListCtrl', ['$scope','Sources','News','Datetime',
 		function($scope, Sources, News, Datetime) {
 			Sources.getSources().success(function(response){
-				$scope.checkboxModel=[];
 				$scope.sources=[];
 				response.forEach(function(source){
-					$scope.checkboxModel[source.name]= source.display;
+					console.log(source);
+					if(source.display){
+					source.class="btn btn-primary";
+					}else{
+					source.class="btn btn-default";
+					}
 					$scope.sources.push(source);
 				});
 			});
-
+			$scope.updateSource = function(s){
+				if(s.display){
+					s.display=false;
+					s.class="btn btn-default";
+				}else{
+					s.display=true;
+					s.class="btn btn-primary";
+				}
+			};
 			$scope.news = [];
 			$scope.orderProp= "date";
 			$scope.today=Datetime.toDay(new Date());
