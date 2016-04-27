@@ -15,6 +15,21 @@ rssReaderServices.factory('Sources',function($http){
 		};	
 		return sources;
 		});
+rssReaderServices.factory('Users',function($http){
+		var users = {};
+		users.getProfile = function(email){
+		if(email=="s"){
+		//return $http.get("http://slapps.fr/rssReader2/ror/users/?.json")
+		//TODO replace this mock / Update ROR model for users
+			return {sources:["Challenges","JDG"]};
+		}else if(email=="geek"){
+			return {sources:["JDG","LifeHacker","Korben"]};
+		}else{
+			return {sources:[]};
+		}
+		};	
+		return users;
+		});
 rssReaderServices.factory('News',function($http){
 		var news = {};
 		news.getLastNews = function(){

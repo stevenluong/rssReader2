@@ -5,7 +5,7 @@ class NewsController < ApplicationController
   # GET /news
   # GET /news.json
   def index
-    @news = News.where(:date=>(Date.today.beginning_of_day..Date.today.end_of_day))
+    @news = News.where(:date=>((Date.today-1).beginning_of_day..Date.today.end_of_day))
   end
 
   # GET /news/1

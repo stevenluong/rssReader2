@@ -13,56 +13,74 @@ var server = http.createServer();
 var server_url = "slapps.fr/rssReader2/ror";
 
 // READ RSS
-// TODO get sources from ROR
-
 http.get('http://'+server_url+'/sources.json', (res) => {
 		var body = '';
 		res.on('data', function(chunk){
 			body += chunk;
-		});
+			});
 		res.on('end', function(){
 			var sources = JSON.parse(body);
-			console.log(sources);
 			readAll(sources);
-		});
-		//var sources = config.sources;
+			});
 		//console.log(res);
 		//res.resume();
 		}).on('error', (e) => {
-	console.log(`Got error: ${e.message}`);
-});
+			console.log(`Got error: ${e.message}`);
+			});
 
 function readAll(sources){
-	//console.log('Reading RSS ...');
 	sources.forEach(function(source){
-		readRSS(source.name,source.rss_url);
-	});
+			readRSS(source.name,source.rss_url);
+			});
 };
 function readRSS(sourceName,sourceLink){
 	var feedparser = new FeedParser();
 	var req = request(sourceLink);
 	req.on('error', done);
 	req.on('response', function (res) {
-		var stream = this;
-		if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
-		stream.pipe(feedparser);
-	});
+			var stream = this;
+			if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
+			stream.pipe(feedparser);
+			});
 	feedparser.on('error', done);
 	//feedparser.on('end', done);
 	var counter = 1;
 	feedparser.on('readable', function() {
-		var item;
-		while (item = this.read()) {
+			var item;
+			while (item = this.read()) {
 			var newDate = parseDate(item.pubDate);
 			var img = "";
 			if(item.enclosures[0]!=undefined){
-				img = item.enclosures[0].url;
+			img = item.enclosures[0].url;
+			//TODO console.log(img);
 			};
+			var getImageLink = function(field,start,end){
+			var n = field.indexOf(start);
+			var tmp = item.description.substring(n+start.length);
+			var m = tmp.indexOf(end);
+			var img = tmp.substring(0,m);
+			//console.log(sourceName+' - '+img);
+			return img;
+			}
+
+			if(sourceName=="Korben") {
+				img=getImageLink(item.description,'src="','"');
+			}
+			if(sourceName=="BBC") {
+				img=item.image.url;
+			}
+			if(sourceName=="LifeHacker") {
+				img=getImageLink(item.description,'<img src="','" />');
+			}
+			if(sourceName=="JDG") {
+				img=getImageLink(item.description,'src="','"');
+			}
+
 			var key = newDate+':'+sourceName;
-			console.log(sourceName+' - '+item.title);
+			//TODO console.log(sourceName+' - '+item.title);
 			ror_post(key,item.title,item.link,img,newDate,sourceName,"description");
 			//TODO STRAIGHT UPDATE OF CLIENT
-		};
+			};
 	});
 };
 
@@ -88,69 +106,69 @@ function done(err){
 }
 // UPDATE CLIENTS
 /*
-socket.on('connection', function (socket) {
-	console.log('connection');
-	socket.emit('connected');
+   socket.on('connection', function (socket) {
+   console.log('connection');
+   socket.emit('connected');
 
-	socket.on('last items',function(){
-		console.log('last items');
-		var today = new Date();
-		console.log(today);
-		var yesterday = new Date();
-		yesterday.setDate(today.getDate() -1);
-		console.log(yesterday);
-		//TODO update client from ROR
-	});
+   socket.on('last items',function(){
+   console.log('last items');
+   var today = new Date();
+   console.log(today);
+   var yesterday = new Date();
+   yesterday.setDate(today.getDate() -1);
+   console.log(yesterday);
+//TODO update client from ROR
+});
 
 });
-*/
+ */
 function ror_post(key,title,link,image_link,date,source, description){
 	//TODO normalise title (no é)
 	var data = {
-		news: {
-			guid: key,
-			title: normalize(title),
-			link: link,
-			image_link: image_link,
-			date: date,
-			source: source,
-			description: normalize(title) 
-		}
+news: {
+guid: key,
+      title: normalize(title),
+      link: link,
+      image_link: image_link,
+      date: date,
+      source: source,
+      description: normalize(title) 
+      }
 	};
 	var dataStr = JSON.stringify(data);
 	var options = {
-		host: "slapps.fr",
-		port: 80,
-		path: '/rssReader2/ror/news.json',
-		method: 'POST',
-		headers: {
-			'Content-Length': dataStr.length,
-			'Content-Type': 'application/json'
-		}
+host: "slapps.fr",
+      port: 80,
+      path: '/rssReader2/ror/news.json',
+      method: 'POST',
+      headers: {
+	      'Content-Length': dataStr.length,
+	      'Content-Type': 'application/json'
+      }
 	};
 	var str = '';
 
 	var req = http.request(options, function(res) {
-		res.setEncoding('utf8');
-		res.on('data', function(data) {
-			str += data;
-		});
+			res.setEncoding('utf8');
+			res.on('data', function(data) {
+					str += data;
+					});
 
-		res.on('end', function() {
-			console.log(str);
-		})
+			res.on('end', function() {
+					//console.log(str);
+					})
 
-		res.on('error', function(error) {
-			console.log(error);
-		})
-	})
+			res.on('error', function(error) {
+					//console.log(error);
+					})
+			})
 	req.on('error',function(e){
-		console.log(e);
-		console.log("SLerror");
-	});
+			console.log(e);
+			console.log("SLerror");
+			});
 	req.end(dataStr);
 }
 function normalize(title){
-	var space = title.replace(/[î]/g,"i").replace(/[à]/g,"a").replace(/[ô]/g,"o").replace(/[éèê]/g,"e").replace(/[^a-zA-Z]/g," ").toLowerCase(); 
+	var space = title.toLowerCase().replace(/[ç]/g,"c").replace(/[üù]/g,"u").replace(/[îï]/g,"i").replace(/[à]/g,"a").replace(/[öô]/g,"o").replace(/[€ëéèê]/g,"e").replace(/[^a-zA-Z0-9]/g," ");
 	return space; 
 }
