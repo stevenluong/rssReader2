@@ -169,6 +169,6 @@ host: "slapps.fr",
 	req.end(dataStr);
 }
 function normalize(title){
-	var space = title.toLowerCase().replace(/[ç]/g,"c").replace(/[üù]/g,"u").replace(/[îï]/g,"i").replace(/[à]/g,"a").replace(/[öô]/g,"o").replace(/[€ëéèê]/g,"e").replace(/[^a-zA-Z0-9]/g," ");
+	var space = title.toLowerCase().replace(/[ç]/g,"c").replace(/[üùû]/g,"u").replace(/[îï]/g,"i").replace(/[àâ]/g,"a").replace(/[öô]/g,"o").replace(/[€ëéèê]/g,"e").replace(/[^a-zA-Z0-9]/g," ");
 	return space; 
 }
