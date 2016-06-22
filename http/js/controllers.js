@@ -52,20 +52,25 @@ rssReaderControllers.controller('NewsListCtrl', ['$scope','Sources','News','User
             $scope.news = [];
             $scope.orderProp= "date";
             $scope.date = new Date();
-            $scope.updateDateBefore = function(){
-                var d = new Date();
-                d.setDate($scope.date.getDate()-1);
-                console.log(d);
-                $scope.date = d;
-                //$scope.formattedDate=Datetime.toDay($scope.date);
+            $scope.updateDate = function(date){
+                var beforeDate = new Date();
+                beforeDate.setDate(date.getDate()-1);
+                $scope.beforeDate = beforeDate;
+                var afterDate = new Date();
+                afterDate.setDate(date.getDate()+1);
+                $scope.afterDate = afterDate;
+               
+                $scope.formattedDate=formatDate(date);
+                
+                $scope.news = []
+                News.getNews(date,function(news){
+                    news.forEach(function(n){
+                        $scope.news.push(n);
+                    })
+                });
+
             }
-            $scope.formattedDate=formatDate($scope.date);
-            //News.getLastNews().success(function(response){
-            News.getNews($scope.date,function(news){
-                news.forEach(function(n){
-                    $scope.news.push(n);
-                })
-            });
+            $scope.updateDate($scope.date);
         }]);
         var formatDate= function(date){
             var d = ("0" + date.getDate()).slice(-2);
