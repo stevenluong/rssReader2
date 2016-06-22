@@ -62,7 +62,9 @@ function readRSS(sourceName,sourceLink){
 			//console.log(sourceName+' - '+img);
 			return img;
 			}
-
+			if(sourceName=="The Verge") {
+				img=getImageLink(item.description,'src="','"');
+			}
 			if(sourceName=="Korben") {
 				img=getImageLink(item.description,'src="','"');
 			}

@@ -1,56 +1,67 @@
 <div class="row">
-<div class="col-md-3 col-md-push-9">
-<p>
-Today : {{today}}
-</p>
-<p>
-Search:<br/> 
-<div class="btn-group">
-<input class="form-control" placeholder="#" ng-model="query"/>
-<a class="clear" ng-click="updateSearch('')">
-    <span class="glyphicon glyphicon-remove"></span>
-</a>
-</div>
-</p>
+    <div class="col-md-3 col-md-push-9">
+        <hr/>
+        <p>
+        Date : {{formattedDate}} 
 
-<p>
-Sources:
-</p>
-<label ng-repeat="s in sources | orderBy:'name'" ng-click="updateSource(s, !s.display)" class="{{s.class}}">{{s.name}}
-</label> 
-<p>
-Displayed : {{filtered.length}} / {{news.length}}
-</p>
-<p>
-Email / Profile : 
-<div class="btn-group">
-   <input ng-keyup="$event.keyCode == 13 && updateProfile()" class="form-control" ng-model="email" placeholder="'geek'/'all' + ENTER" />
-</p>
-</div>
-</div>
-<div class="col-md-9 col-md-pull-3">
-<table class="table table-striped">
-<th>Time</th>
-<th>Source</th>
-<th>Image</th>
-<th>Title</th>
-<!--
-<th>Tag</th>
--->
-<tr ng-repeat="n in news | filter:query | sourcesFilter:this | orderBy:'-date' as filtered">
-<td>{{n.time}}</td>
-<td>{{n.source}}</td>
-<td>
-<div ng-if="n.image_link !=''"><a href="{{n.link}}" target="_blank"><img ng-src="{{n.image_link}}" height="45"/></a></div>
-<div ng-if="n.image_link ==''">-</div>
-</td>
-<td><a href="{{n.link}}" target="_blank">{{n.title}}</a></td>
-<!--
-<td><button class="btn btn-default btn-xs" ng-repeat="w in n.title.split(' ') | tagFilter:this" ng-click="updateSearch(w)">#{{w}} </button></td>
--->
-</tr>
-</table>
-</div>
+        <div class="btn-group">
+            <label class="btn btn-default" ng-click="updateDateBefore()"> &lt; </label>
+            <label class="btn btn-default" ng-click="updateDateToday()"> Today </label>
+            <label class="btn btn-default" ng-click=""> &gt; </label>
+        </div>
+        </p>
+        <hr/>
+        <p>
+        Search:<br/> 
+        <input class="form-control" placeholder="#" ng-model="query"/>
+        <label class="btn btn-default" ng-click="updateSearch('')">
+            <span class="glyphicon glyphicon-remove"></span>
+        </label>
+        </p>
+        <hr/>
+
+        <p>
+        Sources:
+        </p>
+        <div class="btn-group">
+            <label ng-repeat="s in sources | orderBy:'name'" ng-click="updateSource(s, !s.display)" class="{{s.class}}">{{s.name}}
+            </label> 
+        </div>
+        <p>
+        Displayed : {{filtered.length}} / {{news.length}}
+        </p>
+        <hr/>
+        <p>
+        Email / Profile : 
+        <div class="btn-group">
+            <input ng-keyup="$event.keyCode == 13 && updateProfile()" class="form-control" ng-model="email" placeholder="'geek'/'all' + ENTER" />
+        </p>
+        <hr/>
+        </div>
+    </div>
+    <div class="col-md-9 col-md-pull-3">
+        <table class="table table-striped">
+            <th>Time</th>
+            <th>Source</th>
+            <th>Image</th>
+            <th>Title</th>
+            <!--
+                <th>Tag</th>
+            -->
+            <tr ng-repeat="n in news | filter:query | sourcesFilter:this | orderBy:'-date' as filtered">
+                <td>{{n.time}}</td>
+                <td>{{n.source}}</td>
+                <td>
+                    <div ng-if="n.image_link !=''"><a href="{{n.link}}" target="_blank"><img ng-src="{{n.image_link}}" height="45"/></a></div>
+                    <div ng-if="n.image_link ==''">-</div>
+                </td>
+                <td><a ng-click="updateUser(n)" href="{{n.link}}" target="_blank" >{{n.title}}</a></td>
+                <!--
+                    <td><button class="btn btn-default btn-xs" ng-repeat="w in n.title.split(' ') | tagFilter:this" ng-click="updateSearch(w)">#{{w}} </button></td>
+                -->
+            </tr>
+        </table>
+    </div>
 
 </div><!--ROW-->
 
