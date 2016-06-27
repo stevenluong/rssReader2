@@ -10,7 +10,7 @@ var server = http.createServer();
 //var socket = io.listen(server);
 
 //var server_url = "localhost:3000";
-var server_url = "slapps.fr/rssReader2/ror";
+var server_url = "slapps.fr/apollo/ror";
 
 // READ RSS
 http.get('http://'+server_url+'/sources.json', (res) => {
@@ -141,7 +141,7 @@ guid: key,
 	var options = {
 host: "slapps.fr",
       port: 80,
-      path: '/rssReader2/ror/news.json',
+      path: '/apollo/ror/news.json',
       method: 'POST',
       headers: {
 	      'Content-Length': dataStr.length,

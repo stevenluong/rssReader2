@@ -11,7 +11,7 @@ var rssReaderServices = angular.module('rssReaderServices', ['ngResource']);
 rssReaderServices.factory('Sources',function($http){
     var sources = {};
     sources.getSources = function(){
-        return $http.get("http://slapps.fr/rssReader2/ror/sources.json")
+        return $http.get("http://slapps.fr/apollo/ror/sources.json")
     };	
     return sources;
 });
@@ -33,10 +33,10 @@ rssReaderServices.factory('Users',function($http){
 rssReaderServices.factory('News',function($http){
     var news = {};
     news.getLastNews = function(){
-        return $http.get("http://slapps.fr/rssReader2/ror/news.json")
+        return $http.get("http://slapps.fr/apollo/ror/news.json")
     };	
     news.getNews = function(date,callback){
-        $http.get("http://slapps.fr/rssReader2/ror/news.json?date="+normaliseDate(date)).success(function(news){
+        $http.get("http://slapps.fr/apollo/ror/news.json?date="+normaliseDate(date)).success(function(news){
             var results = []
             news.forEach(function(n){
                 n.time=formatDateRorToJs(n.date);
@@ -48,7 +48,8 @@ rssReaderServices.factory('News',function($http){
     return news;
 });
 var formatDateRorToJs = function(date){
-    return date.substring(8,10)+'/'+date.substring(5,7)+' '+date.substring(11,13)+':'+date.substring(14,16);
+    //return date.substring(8,10)+'/'+date.substring(5,7)+' '+date.substring(11,13)+':'+date.substring(14,16);
+    return date.substring(11,13)+':'+date.substring(14,16);
 };
 
 var normaliseDate = function(date){

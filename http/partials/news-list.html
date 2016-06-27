@@ -1,45 +1,47 @@
 <div class="row">
-    <div class="col-md-3 col-md-push-9">
-        <hr/>
-        <p>
-        Date : {{formattedDate}} 
+    <div class="col-md-4 col-md-push-8">
+        <h4>Date</h4> 
+        <div class="form-inline">
+            <form ng-submit="updateSpecificDate()">
+                <input class="form-control" ng-model="formattedDate" value="{{formattedDate}}"/>
+                <div class="btn-group">
+                    <label class="btn btn-default" ng-click="updateDate(beforeDate)"> &lt; </label>
+                    <label class="btn btn-default" ng-click="updateDate(date)"> Today </label>
+                    <label class="btn btn-default" ng-click="updateDate(afterDate)"> &gt; </label>
+                </div>
+            </form>
 
-        <div class="btn-group">
-            <label class="btn btn-default" ng-click="updateDate(beforeDate)"> &lt; </label>
-            <label class="btn btn-default" ng-click="updateDate(date)"> Today </label>
-            <label class="btn btn-default" ng-click="updateDate(afterDate)"> &gt; </label>
         </div>
-        </p>
-        <hr/>
+        <h4>Sources </h4>
+        <label ng-repeat="s in sources | orderBy:'name'" ng-click="updateSource(s, !s.display)" class="{{s.class}}">{{s.name}}
+        </label> 
         <p>
-        Search:<br/> 
-        <input class="form-control" placeholder="#" ng-model="query"/>
-        <label class="btn btn-default" ng-click="updateSearch('')">
-            <span class="glyphicon glyphicon-remove"></span>
-        </label>
-        </p>
-        <hr/>
+        <div class="btn-group">
+            <label class="btn btn-default" ng-click="updateAllSources()"> All </label>
+            <label class="btn btn-default" ng-click="updateNoneSources()"> None </label>
+        </div>
 
-        <p>
-        Sources:
-        </p>
-        <div class="btn-group">
-            <label ng-repeat="s in sources | orderBy:'name'" ng-click="updateSource(s, !s.display)" class="{{s.class}}">{{s.name}}
-            </label> 
-        </div>
-        <p>
         Displayed : {{filtered.length}} / {{news.length}}
         </p>
-        <hr/>
-        <p>
-        Email / Profile : 
-        <div class="btn-group">
-            <input ng-keyup="$event.keyCode == 13 && updateProfile()" class="form-control" ng-model="email" placeholder="'geek'/'all' + ENTER" />
-        </p>
-        <hr/>
+        <h4>Search</h4>
+        <div class="form-inline">
+            <input class="form-control" placeholder="#" ng-model="query"/>
+            <span class="btn btn-default" ng-click="updateSearch('')">
+                <span class="glyphicon glyphicon-remove"></span>
+            </span>
         </div>
+
+        <h4>Keywords</h4>
+        <span ng-repeat="k in keywords" ng-click="updateSearch(k.value)" style="font-size: {{k.count*0.7+10}}px;"> <a>{{k.value}}</a></span>
+
+        <!--
+            <h4> Email / Profile </h4>
+            <div class="form-inline">
+            <input ng-keyup="$event.keyCode == 13 && updateProfile()" class="form-control" ng-model="email" placeholder="'geek'/'all' + ENTER" />
+            </div>
+        -->
     </div>
-    <div class="col-md-9 col-md-pull-3">
+    <div class="col-md-8 col-md-pull-4">
         <table class="table table-striped">
             <th>Time</th>
             <th>Source</th>
