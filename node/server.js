@@ -80,6 +80,7 @@ function readRSS(sourceName,sourceLink){
 
 			var key = newDate+':'+sourceName;
 			//TODO console.log(sourceName+' - '+item.title);
+                        console.log(key);
 			ror_post(key,item.title,item.link,img,newDate,sourceName,"description");
 			//TODO STRAIGHT UPDATE OF CLIENT
 			};

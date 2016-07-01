@@ -56,7 +56,7 @@ rssReaderControllers.controller('NewsListCtrl', ['$scope','Sources','News','User
                 }
             };
             $scope.updateUser = function(news){
-                console.log(news);
+                //console.log(news);
             }
             $scope.updateSearch = function(w){
                 $scope.query = w;
