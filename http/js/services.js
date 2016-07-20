@@ -32,9 +32,11 @@ rssReaderServices.factory('Users',function($http){
 });
 rssReaderServices.factory('News',function($http){
     var news = {};
+    /*
     news.getLastNews = function(){
         return $http.get("http://slapps.fr/apollo/ror/news.json")
     };	
+    */
     news.getNews = function(date,callback){
         $http.get("http://slapps.fr/apollo/ror/news.json?date="+normaliseDate(date)).success(function(news){
             var results = []

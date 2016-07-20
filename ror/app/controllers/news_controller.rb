@@ -14,7 +14,7 @@ class NewsController < ApplicationController
             #@news = News.where(:date=>(Date.today.beginning_of_day..Date.today.end_of_day))
             #  @news = News.all
         end
-        #@news = News.where(:date=>((Date.today).beginning_of_day..Date.today.end_of_day))
+        #@news.select(:title,:link,:date,:source,:image_link,:url)
     end
 
     # GET /news/1

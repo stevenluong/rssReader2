@@ -124,7 +124,6 @@ function done(err){
 });
  */
 function ror_post(key,title,link,image_link,date,source, description){
-	//TODO normalise title (no é)
 	var data = {
 news: {
 guid: key,
@@ -132,8 +131,8 @@ guid: key,
       link: link,
       image_link: image_link,
       date: date,
-      source: source,
-      description: normalize(title) 
+      source: source
+      //TODO description: normalize(title) 
       }
 	};
 	var dataStr = JSON.stringify(data);
