@@ -10,7 +10,7 @@ class NewsController < ApplicationController
             date = Date.strptime(params[:date],"%Y%m%d")
             @news = News.where(:date=>(date.beginning_of_day..date.end_of_day))
         else
-            @news = News.where(:date=>(Date.today.beginning_of_day..Date.today.end_of_day))
+            @news = News.where(:date=>(Date.today.beginning_of_day..Date.today.end_of_day)).order(guid: :desc)
             #@news = News.where(:date=>(Date.today.beginning_of_day..Date.today.end_of_day))
             #  @news = News.all
         end

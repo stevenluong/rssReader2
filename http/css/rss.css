@@ -4,3 +4,7 @@ body {
   .starter-template {
 	  padding: 0px 15px;
 }
+a:visited
+{
+    color:gray;
+}

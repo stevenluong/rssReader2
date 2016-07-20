@@ -52,7 +52,6 @@ function readRSS(sourceName,sourceLink){
 			var img = "";
 			if(item.enclosures[0]!=undefined){
 			img = item.enclosures[0].url;
-			//TODO console.log(img);
 			};
 			var getImageLink = function(field,start,end){
 			var n = field.indexOf(start);
@@ -79,7 +78,6 @@ function readRSS(sourceName,sourceLink){
 			}
 
 			var key = newDate+':'+sourceName;
-			//TODO console.log(sourceName+' - '+item.title);
                         console.log(key);
 			ror_post(key,item.title,item.link,img,newDate,sourceName,"description");
 			//TODO STRAIGHT UPDATE OF CLIENT
