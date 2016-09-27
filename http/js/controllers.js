@@ -38,22 +38,12 @@ rssReaderControllers.controller('NewsListCtrl', ['$scope','Sources','News','User
                     //console.log(source);
                     //TODO update ROR model
                     //source.display=false;
-                    if(source.display){
-                        source.class="btn btn-primary";
-                    }else{
-                        source.class="btn btn-default";
-                    }
                     $scope.sources.push(source);
                 });
             });
             $scope.updateSource = function(s, display){
                 $scope.count=0;
                 s.display=display;
-                if(display){
-                    s.class="btn btn-primary";
-                }else{
-                    s.class="btn btn-default";
-                }
             };
             $scope.updateUser = function(news){
                 //console.log(news);
@@ -111,9 +101,11 @@ rssReaderControllers.controller('NewsListCtrl', ['$scope','Sources','News','User
             }
             $scope.updateDate($scope.date);
         }]);
+
 var formatDate= function(date){
     var d = ("0" + date.getDate()).slice(-2);
     var m = ("0" + (date.getMonth() + 1)).slice(-2);
     var y = date.getFullYear();
     return y+'-'+m+'-'+d;
 };
+
