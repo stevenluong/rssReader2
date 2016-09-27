@@ -45,7 +45,7 @@
         <table class="table table-striped">
             <th>Time</th>
             <th>Source</th>
-            <th>Image</th>
+            <th ng-if="!isMobile()">Image</th>
             <th>Title</th>
             <!--
                 <th>Tag</th>
@@ -53,7 +53,7 @@
             <tr ng-repeat="n in news | filter:query | sourcesFilter:this | orderBy:'-date' as filtered">
                 <td>{{n.time}}</td>
                 <td>{{n.source}}</td>
-                <td>
+                <td ng-if="!isMobile()">
                     <div ng-if="n.image_link !=''"><a href="{{n.link}}" target="_blank"><img ng-src="{{n.image_link}}" height="45"/></a></div>
                     <div ng-if="n.image_link ==''">-</div>
                 </td>
