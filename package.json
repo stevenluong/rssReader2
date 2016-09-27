@@ -14,9 +14,11 @@
     "socket.io-client": "*",
     "forever": "*",
 	"querystring": "*"
+
   },
   "scripts": {
     "postinstall": "bower install",
     "start": "forever start server.js"
   }
 }
+
