@@ -1,10 +1,3 @@
 # rssReader2
 
-##ror
-rails s
-
-##node
-node server
-
-##http 
-sh start.sh
+http://slapps.fr/apollo/http/#/news
