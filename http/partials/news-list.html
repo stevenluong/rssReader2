@@ -13,7 +13,9 @@
 
         </div>
         <h4>Sources </h4>
-        <label ng-repeat="s in sources | orderBy:'name'" ng-click="updateSource(s, !s.display)" class="{{s.class}}">{{s.name}}
+        <label ng-repeat="s in sources | orderBy:'name'" ng-click="updateSource(s, !s.display)">
+            <span ng-if="s.display" class="btn btn-primary">{{s.name}}</span>
+            <span ng-if="!s.display" class="btn btn-default">{{s.name}}</span>
         </label> 
         <p>
         <div class="btn-group">
