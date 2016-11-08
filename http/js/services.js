@@ -6,16 +6,16 @@
 
 /* Services */
 
-var rssReaderServices = angular.module('rssReaderServices', ['ngResource']);
+var mainServices = angular.module('mainServices', ['ngResource']);
 
-rssReaderServices.factory('Sources',function($http){
+mainServices.factory('Sources',function($http){
     var sources = {};
     sources.getSources = function(){
         return $http.get("http://slapps.fr/apollo/ror/sources.json")
     };	
     return sources;
 });
-rssReaderServices.factory('Users',function($http){
+mainServices.factory('Users',function($http){
     var users = {};
     users.getProfile = function(email){
         if(email=="s"){
@@ -30,13 +30,14 @@ rssReaderServices.factory('Users',function($http){
     };	
     return users;
 });
-rssReaderServices.factory('News',function($http){
+mainServices.factory('News',function($http){
     var news = {};
     /*
     news.getLastNews = function(){
         return $http.get("http://slapps.fr/apollo/ror/news.json")
     };	
     */
+    //TODO use resources
     news.getNews = function(date,callback){
         $http.get("http://slapps.fr/apollo/ror/news.json?date="+normaliseDate(date)).success(function(news){
             var results = []

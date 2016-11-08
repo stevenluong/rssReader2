@@ -6,8 +6,8 @@ var serverSocket = "slapps.fr:3030";
 
 /* Controllers */
 
-var rssReaderControllers = angular.module('rssReaderControllers', []);
-rssReaderControllers.controller('NewsListCtrl', ['$scope','Sources','News','Users',
+var mainControllers = angular.module('mainControllers', []);
+mainControllers.controller('NewsListCtrl', ['$scope','Sources','News','Users',
         function($scope, Sources, News, Users) {
             $scope.updateAllSources= function(){
                 $scope.sources.forEach(function(s){

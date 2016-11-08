@@ -2,15 +2,15 @@
 
 /* App Module */
 
-var rssReaderApp = angular.module('rssReaderApp', [
+var mainApp = angular.module('mainApp', [
   'ngRoute',
   //'rssReaderAnimations',
-  'rssReaderControllers',
-  'rssReaderFilters',
-  'rssReaderServices'
+  'mainControllers',
+  'mainFilters',
+  'mainServices'
 ]);
 
-rssReaderApp.config(['$routeProvider',
+mainApp.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
       when('/news', {

@@ -8,16 +8,16 @@ var FeedParser = require('feedparser');
 var server = http.createServer();
 //server.listen(3030);
 //var socket = io.listen(server);
-
+var minutes = 15;
 //var server_url = "localhost:3000";
 var server_url = "slapps.fr/apollo/ror";
 var now = new Date();
 var nNow = normalizeDate(now);
 var before = now;
-before.setMinutes(now.getMinutes()-15);
+before.setMinutes(now.getMinutes()-minutes);
 var nLast = normalizeDate(before);
-//console.log(nNow);
-//console.log(nLast);
+console.log(nNow);
+console.log(nLast);
 
 // READ RSS
 // TODO rework ? 
@@ -57,8 +57,10 @@ function readRSS(sourceName,sourceLink){
         var item;
         while (item = this.read()) {
             var nDate = normalizeDate(item.pubDate);
-            if(nDate < nLast)
-                continue;
+            var date = item.pubDate;
+            console.log(date);
+            //if(nDate < nLast)
+            //    continue;
             var img = "";
             if(item.enclosures[0]!=undefined){
                 img = item.enclosures[0].url;
@@ -89,7 +91,7 @@ function readRSS(sourceName,sourceLink){
 
             var key = nDate+':'+sourceName;
             console.log(key);
-            ror_post(key,item.title,item.link,img,nDate,sourceName,"description");
+            ror_post(key,item.title,item.link,img,date,sourceName,"description");
             //TODO STRAIGHT UPDATE OF CLIENT
         };
     });
@@ -102,7 +104,7 @@ function normalizeDate(date){
     var hours = ("0" + date.getHours()).slice(-2);
     var minutes = ("0" + date.getMinutes()).slice(-2);
     var seconds = ("0" + date.getSeconds()).slice(-2);
-    var milli = date.getMilliseconds();
+    var milli = ("00"+date.getMilliseconds()).slice(-3);
     return parseInt(year+month+day+hours+minutes+seconds+milli);
 };
 /*
@@ -146,6 +148,7 @@ function ror_post(key,title,link,image_link,date,source, description){
                 //TODO description: normalize(title) 
         }
     };
+    console.log("POST:"+key);
     var dataStr = JSON.stringify(data);
     var options = {
         host: "slapps.fr",
