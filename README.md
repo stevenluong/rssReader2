@@ -1,3 +1,3 @@
-# rssReader2
+# Apollo
 
-http://slapps.fr/apollo/http/#/news
+http://slapps.fr/apollo/
