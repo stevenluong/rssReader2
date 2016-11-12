@@ -9,8 +9,18 @@ var server = http.createServer();
 //server.listen(3030);
 //var socket = io.listen(server);
 var minutes = 15;
-//var server_url = "localhost:3000";
+//DEV
+var server_url = "slapps.fr";
+var server_port = "3000";
+var news_path = '/news.json';
+var sources_path = '/sources.json';
+//PROD
+/*
 var server_url = "slapps.fr/apollo/ror";
+var server_port = "80";
+var news_path = '/apollo/ror/news.json';
+var sources_path = '/apollo/ror/sources.json';
+*/
 var now = new Date();
 var nNow = normalizeDate(now);
 var before = now;
@@ -21,7 +31,8 @@ console.log(nLast);
 
 // READ RSS
 // TODO rework ? 
-http.get('http://'+server_url+'/sources.json', (res) => {
+console.log('http://'+server_url+':'+server_port+sources_path)
+http.get('http://'+server_url+':'+server_port+sources_path, (res) => {
         var body = '';
         res.on('data', function(chunk){
             body += chunk;
@@ -151,9 +162,9 @@ function ror_post(key,title,link,image_link,date,source, description){
     console.log("POST:"+key);
     var dataStr = JSON.stringify(data);
     var options = {
-        host: "slapps.fr",
-        port: 80,
-        path: '/apollo/ror/news.json',
+        host: server_url,
+        port: server_port,
+        path: news_path,
         method: 'POST',
         headers: {
             'Content-Length': dataStr.length,
