@@ -6,5 +6,3 @@ ADD Gemfile /apollo/Gemfile
 ADD Gemfile.lock /apollo/Gemfile.lock
 RUN bundle install
 ADD . /apollo
-RUN rake db:migrate
-RUN rake db:seed

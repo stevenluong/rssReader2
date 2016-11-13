@@ -2,6 +2,18 @@ var http = require('http');
 //var io = require('socket.io');
 var request = require('request');
 var FeedParser = require('feedparser');
+var COMMON = require('./common.js');
+var kue = require('kue')
+, queue = kue.createQueue({
+    redis:{
+        host: 'redis',
+    }
+});
+var CronJob = require('cron').CronJob;
+new CronJob('0 * * * * *', function() {
+      console.log('You will see this message every second');
+      process();
+}, null, true);
 
 //var config = require('./config.json');
 
@@ -16,11 +28,11 @@ var news_path = '/news.json';
 var sources_path = '/sources.json';
 //PROD
 /*
-var server_url = "slapps.fr/apollo/ror";
-var server_port = "80";
-var news_path = '/apollo/ror/news.json';
-var sources_path = '/apollo/ror/sources.json';
-*/
+   var server_url = "slapps.fr/apollo/ror";
+   var server_port = "80";
+   var news_path = '/apollo/ror/news.json';
+   var sources_path = '/apollo/ror/sources.json';
+   */
 var now = new Date();
 var nNow = normalizeDate(now);
 var before = now;
@@ -31,6 +43,7 @@ console.log(nLast);
 
 // READ RSS
 // TODO rework ? 
+function process(){
 console.log('http://'+server_url+':'+server_port+sources_path)
 http.get('http://'+server_url+':'+server_port+sources_path, (res) => {
         var body = '';
@@ -44,6 +57,7 @@ http.get('http://'+server_url+':'+server_port+sources_path, (res) => {
         }).on('error', (e) => {
     console.log(`Got error: ${e.message}`);
 });
+}
 
 function readAll(sources){
     sources.forEach(function(source){
@@ -102,12 +116,31 @@ function readRSS(sourceName,sourceLink){
 
             var key = nDate+':'+sourceName;
             console.log(key);
-            ror_post(key,item.title,item.link,img,date,sourceName,"description");
+            //TODO kue
+            var data = {
+                news: {
+                    guid: key,
+                    title: normalize(item.title),
+                    link: item.link,
+                    image_link: img,
+                    date: date,
+                    source: sourceName
+                        //TODO description: normalize(title) 
+                }
+            };
+
+            queue.create('news',data.news).save();
             //TODO STRAIGHT UPDATE OF CLIENT
         };
     });
 };
-
+queue.process('news', function(job, done){
+    console.log(job.data);
+    COMMON.ror_post(job.data,"slapps.fr","3000","/news.json",function(res){
+        //console.log(res);
+        done();
+    });
+});
 function normalizeDate(date){
     var year = date.getFullYear();
     var month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -147,52 +180,6 @@ function normalizeDate(date){
 
 });
 */
-function ror_post(key,title,link,image_link,date,source, description){
-    var data = {
-        news: {
-            guid: key,
-            title: normalize(title),
-            link: link,
-            image_link: image_link,
-            date: date,
-            source: source
-                //TODO description: normalize(title) 
-        }
-    };
-    console.log("POST:"+key);
-    var dataStr = JSON.stringify(data);
-    var options = {
-        host: server_url,
-        port: server_port,
-        path: news_path,
-        method: 'POST',
-        headers: {
-            'Content-Length': dataStr.length,
-            'Content-Type': 'application/json'
-        }
-    };
-    var str = '';
-
-    var req = http.request(options, function(res) {
-        res.setEncoding('utf8');
-        res.on('data', function(data) {
-            str += data;
-        });
-
-        res.on('end', function() {
-            //console.log(str);
-        })
-
-        res.on('error', function(error) {
-            //console.log(error);
-        })
-    })
-    req.on('error',function(e){
-        console.log(e);
-        console.log("SLerror");
-    });
-    req.end(dataStr);
-}
 function normalize(title){
     var space = title.toLowerCase().replace(/[ç]/g,"c").replace(/[üùû]/g,"u").replace(/[îï]/g,"i").replace(/[àâ]/g,"a").replace(/[öô]/g,"o").replace(/[œ]/g,"oe").replace(/[€ëéèê]/g,"e").replace(/[^a-zA-Z0-9]/g," ");
     return space; 
