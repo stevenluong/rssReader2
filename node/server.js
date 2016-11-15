@@ -10,17 +10,21 @@ var kue = require('kue')
     }
 });
 var CronJob = require('cron').CronJob;
-new CronJob('0 * * * * *', function() {
-      console.log('You will see this message every second');
-      process();
-}, null, true);
+var cronJob = new CronJob({
+    cronTime: '0 0,30 * * * *', 
+    onTick: function() {
+        console.log("minute");
+        process();
+    },
+    start: false
+});
+cronJob.start();
 
 //var config = require('./config.json');
 
-var server = http.createServer();
-//server.listen(3030);
+//var server = http.createServer();
 //var socket = io.listen(server);
-var minutes = 15;
+//TODO CLEAN var minutes = 15;
 //DEV
 var server_url = "slapps.fr";
 var server_port = "3000";
@@ -33,30 +37,38 @@ var sources_path = '/sources.json';
    var news_path = '/apollo/ror/news.json';
    var sources_path = '/apollo/ror/sources.json';
    */
-var now = new Date();
-var nNow = normalizeDate(now);
-var before = now;
-before.setMinutes(now.getMinutes()-minutes);
-var nLast = normalizeDate(before);
-console.log(nNow);
-console.log(nLast);
 
 // READ RSS
 // TODO rework ? 
 function process(){
-console.log('http://'+server_url+':'+server_port+sources_path)
-http.get('http://'+server_url+':'+server_port+sources_path, (res) => {
-        var body = '';
-        res.on('data', function(chunk){
-            body += chunk;
+    queue.process('news', function(job, done){
+        //console.log(job.data);
+        COMMON.ror_post(job.data,"slapps.fr","3000","/news.json",function(res){
+            done();
         });
-        res.on('end', function(){
-            var sources = JSON.parse(body);
-            readAll(sources);
+    });
+
+    //TODO Clean up
+    //var now = new Date();
+    //var nNow = normalizeDate(now);
+    //var before = now;
+    //before.setMinutes(now.getMinutes()-minutes);
+    //var nLast = normalizeDate(before);
+    //console.log(nNow);
+    //console.log(nLast);
+    console.log('http://'+server_url+':'+server_port+sources_path)
+        http.get('http://'+server_url+':'+server_port+sources_path, (res) => {
+                var body = '';
+                res.on('data', function(chunk){
+                    body += chunk;
+                });
+                res.on('end', function(){
+                    var sources = JSON.parse(body);
+                    readAll(sources);
+                });
+                }).on('error', (e) => {
+            console.log(`Got error: ${e.message}`);
         });
-        }).on('error', (e) => {
-    console.log(`Got error: ${e.message}`);
-});
 }
 
 function readAll(sources){
@@ -83,7 +95,7 @@ function readRSS(sourceName,sourceLink){
         while (item = this.read()) {
             var nDate = normalizeDate(item.pubDate);
             var date = item.pubDate;
-            console.log(date);
+            //console.log(date);
             //if(nDate < nLast)
             //    continue;
             var img = "";
@@ -115,8 +127,7 @@ function readRSS(sourceName,sourceLink){
             }
 
             var key = nDate+':'+sourceName;
-            console.log(key);
-            //TODO kue
+            //console.log(key);
             var data = {
                 news: {
                     guid: key,
@@ -128,19 +139,11 @@ function readRSS(sourceName,sourceLink){
                         //TODO description: normalize(title) 
                 }
             };
-
             queue.create('news',data.news).save();
             //TODO STRAIGHT UPDATE OF CLIENT
         };
     });
 };
-queue.process('news', function(job, done){
-    console.log(job.data);
-    COMMON.ror_post(job.data,"slapps.fr","3000","/news.json",function(res){
-        //console.log(res);
-        done();
-    });
-});
 function normalizeDate(date){
     var year = date.getFullYear();
     var month = ("0" + (date.getMonth() + 1)).slice(-2);
