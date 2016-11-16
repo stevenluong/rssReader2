@@ -28,7 +28,7 @@ module Ror
         })
         config.middleware.insert_before 0, "Rack::Cors", :debug => true, :logger => (-> { Rails.logger }) do
             allow do
-                origins 'http://slapps.fr:8001'
+                origins 'http://slapps.fr:8001','http://slapps.fr:8888'
 
                 #resource '/cors',
                 #    :headers => :any,
