@@ -11,7 +11,7 @@ var kue = require('kue')
 });
 var CronJob = require('cron').CronJob;
 var cronJob = new CronJob({
-    cronTime: '0 0,30 * * * *', 
+    cronTime: '0 0,15,30,45 * * * *', 
     onTick: function() {
         console.log("minute");
         process();
