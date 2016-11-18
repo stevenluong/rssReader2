@@ -4,5 +4,5 @@ WORKDIR /tmp
 ADD Gemfile /tmp/Gemfile
 ADD Gemfile.lock /tmp/Gemfile.lock
 RUN bundle install
-RUN mkdir /apollo
-WORKDIR /apollo
+RUN mkdir /ror
+WORKDIR /ror

@@ -1,6 +1,5 @@
 FROM node:latest
-RUN mkdir /apollo
-WORKDIR /apollo
-ADD package.json /apollo/package.json
+RUN mkdir /node
+WORKDIR /node
+ADD package.json /node/package.json
 RUN npm install
-#ADD . /apollo
