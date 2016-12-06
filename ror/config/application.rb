@@ -22,13 +22,17 @@ module Ror
 
         # Do not swallow errors in after_commit/after_rollback callbacks.
         config.active_record.raise_in_transactional_callbacks = true
-        config.action_dispatch.default_headers.merge!({
-            'Access-Control-Allow-Origin' => 'http://slapps.fr',
-            'Access-Control-Request-Method' => '*'
-        })
+       # config.action_dispatch.default_headers.merge!({
+       #     'Access-Control-Allow-Origin' => 'http://slapps.fr',
+       #     'Access-Control-Request-Method' => '*'
+       # })
         config.middleware.insert_before 0, "Rack::Cors", :debug => true, :logger => (-> { Rails.logger }) do
             allow do
-                origins 'http://slapps.fr:8001','http://slapps.fr:8888'
+                origins 'http://slapps.fr:8001','http://slapps.fr:8888','http://52.51.186.59','http://slapps.fr'
+                #origins 'http://52.51.186.59'
+                origins '*'
+
+
 
                 #resource '/cors',
                 #    :headers => :any,
