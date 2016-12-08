@@ -21,6 +21,8 @@ services:
             - ./node/:/node
             - /node/node_modules
         restart: always
+        networks:
+            - nginx_default
     http:
         build: http/.
         command: http-server . -p 80
@@ -35,10 +37,13 @@ services:
         networks:
             - nginx_default
     redis:
+        #build: redis/.
         image: redis
-        ports:
-            - "6379:6379"
+        #ports:
+        #    - "6379:6379"
         restart: always
+        networks:
+            - nginx_default
 networks:
     nginx_default:
         external: true
