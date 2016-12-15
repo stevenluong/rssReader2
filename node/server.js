@@ -6,7 +6,7 @@ var COMMON = require('./common.js');
 var kue = require('kue');
 //Variables config
 var server_host= "ror";
-var server_port = "3000";
+var server_port = "80";
 var news_path = '/news.json';
 var sources_path = '/sources.json';
 //
