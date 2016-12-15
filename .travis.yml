@@ -1,0 +1,13 @@
+sudo: required
+
+services:
+  - docker
+
+env:
+  DOCKER_COMPOSE_VERSION: 1.9.0
+
+script:
+  - ls -al
+  - docker-compose up -d
+  - docker-compose ps
+
