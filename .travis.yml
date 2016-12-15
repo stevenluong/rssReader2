@@ -8,6 +8,7 @@ env:
 
 script:
   - ls -al
+  - docker network create nginx_default
   - docker-compose up -d
   - docker-compose ps
 
