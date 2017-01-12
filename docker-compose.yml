@@ -14,7 +14,7 @@ services:
         build: node/.
         command: node server.js
         #depends_on: 
-        links:
+        depends_on:
             - ror
             - redis
         volumes:
@@ -37,10 +37,13 @@ services:
         networks:
             - nginx_default
     redis:
-        #build: redis/.
-        image: redis
+        build: redis/.
+        command: redis-server /usr/local/etc/redis/redis.conf
+        #image: redis
         #ports:
         #    - "6379:6379"
+        volumes:
+            - /redis/redis.conf:/usr/local/etc/redis/redis.conf
         restart: always
         networks:
             - nginx_default
