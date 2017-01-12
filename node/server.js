@@ -71,6 +71,9 @@ var readAll = function(sources){
 			});
 };
 function readRSS(sourceName,sourceLink){
+        var now = new Date();
+	var nNow = normalizeDate(now);
+
 	var feedparser = new FeedParser();
 	var req = request(sourceLink);
 	//req.on('error', done);
@@ -121,7 +124,7 @@ function readRSS(sourceName,sourceLink){
 			}
 
 			var key = nDate+':'+sourceName;
-			console.log(key);
+			console.log('['+nNow+']'+key);
 			var data = {
 news: {
 guid: key,
@@ -133,7 +136,7 @@ guid: key,
 	      //TODO description: normalize(title) 
       }
 			};
-			queue.create('news',data.news).save();
+			queue.create('news',data.news).removeOnComplete(true).save();
 			//TODO STRAIGHT UPDATE OF CLIENT
 			};
 	});
