@@ -79,13 +79,15 @@ mainControllers.controller('NewsListCtrl', ['$scope','Sources','News','Users',
 
                 News.getNews(date,function(news){
                     news.forEach(function(n){
-                        $scope.news.push(n);
-                        n.title.split(' ').forEach(function (word){
-                            if(word in keywords)
-                                keywords[word]++;
-                            else
-                                keywords[word]=1;
-                        }); 
+                        if(n.image_link!=""){
+                            $scope.news.push(n);
+                            n.title.split(' ').forEach(function (word){
+                                if(word in keywords)
+                                    keywords[word]++;
+                                else
+                                    keywords[word]=1;
+                            }); 
+                        }
                     })
                     for(var i in keywords){
                         var keyword = {};

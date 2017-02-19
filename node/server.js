@@ -5,12 +5,12 @@ var FeedParser = require('feedparser');
 var COMMON = require('./common.js');
 var kue = require('kue');
 //Variables config
-var server_host= "ror";
+var server_host= "apollo_ror_1";
 var server_port = "80";
 var news_path = '/news.json';
 var sources_path = '/sources.json';
 //
-console.log('---');
+console.log('-Start');
 var queue = kue.createQueue({
     redis:{
         host: 'redis',
@@ -31,8 +31,10 @@ cronJob.start();
 //var socket = io.listen(server);
 //TODO CLEAN var minutes = 15;
 queue.process('news', function(job, done){
+    //console.log(server_host);
+    //console.log(news_path);
     COMMON.ror_post(job.data,server_host,server_port,news_path,function(res){
-        done();
+       done();
     });
 });
 var process = function(){
@@ -51,7 +53,7 @@ var process = function(){
         method: 'GET'
     };
 
-    //console.log(options);
+    console.log(options);
     http.request(options, function(res) {
         //console.log('STATUS: ' + res.statusCode);
         //console.log('HEADERS: ' + JSON.stringify(res.headers));
@@ -137,6 +139,7 @@ function readRSS(sourceName,sourceLink){
             };
             //COMMON.ror_post(data,server_host,server_port,news_path,function(res){
             //});
+            //console.log("queue.create")
             queue.create('news',data.news).ttl(600000).removeOnComplete(true).save();
             //TODO STRAIGHT UPDATE OF CLIENT
         };
