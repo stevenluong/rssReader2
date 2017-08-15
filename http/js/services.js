@@ -43,7 +43,7 @@ mainServices.factory('News',function($http){
         $http.get("http://"+server_host+":"+server_port+news_path+"?date="+normaliseDate(date)).success(function(news){
             var results = []
             news.forEach(function(n){
-                n.time=formatDateRorToJs(n.date);
+                n.time=formatDateRorToJs(new Date(n.date).toString());
                 results.push(n);
             })
             callback(results);
@@ -52,8 +52,7 @@ mainServices.factory('News',function($http){
     return news;
 });
 var formatDateRorToJs = function(date){
-    //return date.substring(8,10)+'/'+date.substring(5,7)+' '+date.substring(11,13)+':'+date.substring(14,16);
-    return date.substring(11,13)+':'+date.substring(14,16);
+    return date.substring(16,18)+':'+date.substring(19,21);
 };
 
 var normaliseDate = function(date){

@@ -1,0 +1,39 @@
+<!--
+    <ion-header>
+    <ion-navbar>
+    <button ion-button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>List</ion-title>
+    </ion-navbar>
+    </ion-header>
+-->
+<ion-content>
+    <ion-item-group>
+        <ion-item-divider>
+            <b>Date</b> 
+        </ion-item-divider>
+        <ion-item>
+              <ion-datetime displayFormat="DDDD DD MMMM" pickerFormat="DD MMMM" [(ngModel)]="date" (ionChange)="updateStringDate(date)"></ion-datetime>
+
+        </ion-item>
+        <ion-item>
+            <button ion-button (click)="updateDate(dayBefore)">
+                  <ion-icon name="arrow-dropleft"></ion-icon>
+            </button>
+            <button ion-button (click)="updateDate(today)">
+                 Today
+            </button>
+            <button ion-button (click)="updateDate(dayAfter)">
+                    <ion-icon name="arrow-dropright"></ion-icon>
+            </button>
+        </ion-item>
+        <ion-item-divider>
+            <b>Sources</b> 
+        </ion-item-divider>
+        <ion-item *ngFor="let item of items">
+            <ion-label>{{item.name}}</ion-label>
+            <ion-toggle checked="{{item.display}}" (ionChange)="updateSources(item)"></ion-toggle>
+        </ion-item>
+    </ion-item-group>
+</ion-content>

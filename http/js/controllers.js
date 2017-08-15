@@ -79,6 +79,7 @@ mainControllers.controller('NewsListCtrl', ['$scope','Sources','News','Users',
 
                 News.getNews(date,function(news){
                     news.forEach(function(n){
+                        //SELECTION
                         if(n.image_link!=""){
                             $scope.news.push(n);
                             n.title.split(' ').forEach(function (word){
