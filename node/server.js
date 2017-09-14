@@ -3,22 +3,16 @@ var http = require('http');
 var request = require('request');
 var FeedParser = require('feedparser');
 var COMMON = require('./common.js');
-var kue = require('kue');
 //Variables config
-var server_host= "apollo_ror_1";
-var server_port = "80";
-var news_path = '/news.json';
-var sources_path = '/sources.json';
+var server_host= "apollo_loopback_1";
+var server_port = "3000";
+var news_path = '/api/News';
+var sources_path = '/api/Sources';
 //
 console.log('-Start');
-var queue = kue.createQueue({
-    redis:{
-        host: 'redis',
-    }
-});
 var CronJob = require('cron').CronJob;
 var cronJob = new CronJob({
-    cronTime: '0 0,15,30,45 * * * *', 
+    cronTime: '0 0 * * * *', 
     onTick: function() {
         process();
     }
@@ -30,13 +24,6 @@ cronJob.start();
 //var server = http.createServer();
 //var socket = io.listen(server);
 //TODO CLEAN var minutes = 15;
-queue.process('news', function(job, done){
-    //console.log(server_host);
-    //console.log(news_path);
-    COMMON.ror_post(job.data,server_host,server_port,news_path,function(res){
-       done();
-    });
-});
 var process = function(){
     //TODO Clean up
     //var now = new Date();
@@ -125,14 +112,14 @@ function readRSS(sourceName,sourceLink){
             }
 
             var key = nDate+':'+sourceName;
-            console.log('['+nNow+']'+key);
+            //console.log('['+nNow+']'+key);
             var data = {
                 news: {
                     guid: key,
                     title: normalize(item.title),
                     link: item.link,
                     image_link: img,
-                    date: date,
+                    datetime: date,
                     source: sourceName
                         //TODO description: normalize(title) 
                 }
@@ -140,8 +127,11 @@ function readRSS(sourceName,sourceLink){
             //COMMON.ror_post(data,server_host,server_port,news_path,function(res){
             //});
             //console.log("queue.create")
-            queue.create('news',data.news).ttl(600000).removeOnComplete(true).save();
+            //queue.create('news',data.news).ttl(600000).removeOnComplete(true).save();
             //TODO STRAIGHT UPDATE OF CLIENT
+            COMMON.ror_post(data.news,server_host,server_port,news_path,function(res){
+                console.log(res);
+            });
         };
     });
 };

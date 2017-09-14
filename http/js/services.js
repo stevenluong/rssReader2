@@ -1,7 +1,7 @@
-var server_host = "apollo_ror.slapps.fr";
+var server_host = "apollo-loopback.slapps.fr";
 var server_port = "80";
-var news_path = '/news.json';
-var sources_path = '/sources.json';
+var news_path = '/api/News';
+var sources_path = '/api/Sources';
 'use strict';
 
 /* Services */
