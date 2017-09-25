@@ -32,7 +32,7 @@
         </div>
 
         <h4>Keywords</h4>
-        <span ng-repeat="k in keywords" ng-click="updateSearch(k.value)" style="font-size: {{k.count*0.7+10}}px;"> <a>{{k.value}}</a></span>
+        <span ng-repeat="k in keywords" ng-click="updateSearch(k.value)" style="font-size: {{k.count*0.2}}px;"> <a>{{k.value}}</a></span>
 
         <!--
             <h4> Email / Profile </h4>
@@ -50,7 +50,7 @@
             <!--
                 <th>Tag</th>
             -->
-            <tr ng-repeat="n in news | filter:query | sourcesFilter:this | orderBy:'-date' as filtered">
+            <tr ng-repeat="n in news | filter:query | sourcesFilter:this | orderBy:'-datetime' as filtered">
                 <td>{{n.time}}</td>
                 <td>{{n.source}}</td>
                 <td ng-if="!isMobile()">

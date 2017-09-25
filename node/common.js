@@ -12,11 +12,12 @@ module.exports = {
 	},
 	ror_post: function(data,host,port,path,callback){
 		var dataStr = JSON.stringify(data);
+                console.log(dataStr);
 		var options = {
 			host: host,
 			port: port,
 			path: path,
-			method: 'POST',
+			method: 'PUT',
 			headers: {
 				'Content-Length': dataStr.length,
 				'Content-Type': 'application/json'

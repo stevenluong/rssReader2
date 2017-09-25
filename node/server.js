@@ -61,7 +61,13 @@ var readAll = function(sources){
 };
 function readRSS(sourceName,sourceLink){
     var now = new Date();
+    console.log(now);
+    var start = new Date();
+    start.setHours(now.getHours(),0,0,0);
+    var end = new Date();
+    end.setHours(now.getHours(),59,59,999);
     var nNow = normalizeDate(now);
+    console.log(nNow);
     var feedparser = new FeedParser();
     var req = request(sourceLink);
     //req.on('error', done);
@@ -80,9 +86,13 @@ function readRSS(sourceName,sourceLink){
         while (item = this.read()) {
             var nDate = normalizeDate(item.pubDate);
             var date = item.pubDate;
-            //console.log(date);
-            //if(nDate < nLast)
-            //    continue;
+            console.log(now);
+            console.log(nNow);
+            console.log(start);
+            console.log(date);
+            console.log(end);
+            if(date < start && date > end)
+                continue;
             var img = "";
             if(item.enclosures[0]!=undefined){
                 img = item.enclosures[0].url;
@@ -112,7 +122,7 @@ function readRSS(sourceName,sourceLink){
             }
 
             var key = nDate+':'+sourceName;
-            //console.log('['+nNow+']'+key);
+            console.log('['+nNow+']'+key);
             var data = {
                 news: {
                     guid: key,
@@ -130,7 +140,7 @@ function readRSS(sourceName,sourceLink){
             //queue.create('news',data.news).ttl(600000).removeOnComplete(true).save();
             //TODO STRAIGHT UPDATE OF CLIENT
             COMMON.ror_post(data.news,server_host,server_port,news_path,function(res){
-                console.log(res);
+                //console.log(res);
             });
         };
     });

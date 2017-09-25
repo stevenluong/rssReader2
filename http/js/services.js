@@ -40,12 +40,21 @@ mainServices.factory('News',function($http){
     */
     //TODO use resources
     news.getNews = function(date,callback){
-        $http.get("http://"+server_host+":"+server_port+news_path+"?date="+normaliseDate(date)).success(function(news){
+        var start = date;
+        start.setHours(0,0,0,0);
+        var s = start.toISOString();
+        console.log(s);
+        var end = date;
+        end.setHours(23,59,59,999);
+        var e = end.toISOString();
+        console.log(e);
+        $http.get("http://"+server_host+":"+server_port+news_path+'?filter={"where":{"datetime":{"gt":"'+s+'","lt":"'+e+'"}}}').success(function(news){//+normaliseDate(date)).success(function(news){
             var results = []
             news.forEach(function(n){
-                n.time=formatDateRorToJs(new Date(n.date).toString());
+                n.time=formatDateRorToJs(new Date(n.datetime).toString());
                 results.push(n);
             })
+            console.log(results);
             callback(results);
         })
     };

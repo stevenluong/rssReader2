@@ -90,12 +90,12 @@ mainControllers.controller('NewsListCtrl', ['$scope','Sources','News','Users',
                             }); 
                         }
                     })
-                    for(var i in keywords){
+                    for(var k in keywords){
                         var keyword = {};
-                        keyword.value = i;
-                        keyword.count = keywords[i];
+                        keyword.value = k;
+                        keyword.count = keywords[k];
                         //console.log(keyword);
-                        if(keyword.count>7 && keyword.value.length>4){
+                        if(keyword.count>50 && keyword.value.length>4){
                             $scope.keywords.push(keyword);
                         }
                     }
