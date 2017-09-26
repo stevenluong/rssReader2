@@ -40,6 +40,7 @@ mainServices.factory('News',function($http){
     */
     //TODO use resources
     news.getNews = function(date,callback){
+        var results = []
         var start = date;
         start.setHours(0,0,0,0);
         var s = start.toISOString();
@@ -48,8 +49,8 @@ mainServices.factory('News',function($http){
         end.setHours(23,59,59,999);
         var e = end.toISOString();
         console.log(e);
-        $http.get("http://"+server_host+":"+server_port+news_path+'?filter={"where":{"datetime":{"gt":"'+s+'","lt":"'+e+'"}}}').success(function(news){//+normaliseDate(date)).success(function(news){
-            var results = []
+        //$http.get("http://"+server_host+":"+server_port+news_path+'?filter={"where":{"datetime":{"gt":"'+s+'","lt":"'+e+'"}}}').success(function(news){//+normaliseDate(date)).success(function(news){
+        $http.get("http://"+server_host+":"+server_port+news_path+'?filter[where][and][0][datetime][gt]='+s+'&filter[where][and][1][datetime][lt]='+e).success(function(news){//+normaliseDate(date)).success(function(news){
             news.forEach(function(n){
                 n.time=formatDateRorToJs(new Date(n.datetime).toString());
                 results.push(n);
