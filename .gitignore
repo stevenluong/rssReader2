@@ -4,6 +4,7 @@ node_modules/
 ror/public/assets/
 ror/vendor/bundle/
 ror/vendor/cache/
+tmp/
 *.swp
 *.swo
 

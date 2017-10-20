@@ -49,6 +49,21 @@ services:
         restart: always
         networks:
             - nginx_default
+    ionic:
+        build: ionic/.
+        #command: bash -c "npm rebuild node-sass --force && ionic serve --no-interactive --address 0.0.0.0"
+        command: http-server ./platforms/browser/www -p 80
+        #command: bash -c "ionic cordova run browser --no-interactive --address 0.0.0.0 --nolivereload"
+        #depends_on: 
+        #    - ror
+        #ports:
+        #    - "8080:80"
+        volumes:
+            - ./ionic/:/ionic
+        restart: always
+        networks:
+            - nginx_default
+
     # redis:
     #    build: redis/.
     #    command: bash -c "sysctl vm.overcommit_memory=1 && redis-server /usr/local/etc/redis/redis.conf"
