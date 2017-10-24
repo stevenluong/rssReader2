@@ -167,6 +167,3 @@ function normalize(title){
 //getNewTitles();
 
 
-//TODO Every 15min
-//TODO Optimise load on API
-//TODO Testable function
