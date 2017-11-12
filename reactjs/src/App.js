@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button,Grid, Row, Col,Table } from 'react-bootstrap';
 //import logo from './logo.svg';
 import './App.css';
 
@@ -12,7 +12,7 @@ class App extends Component {
             titles : [],
             sources : [],
             date : new Date(),
-            //date : y,
+                //date : y,
         };
         fetch("http://apollo-loopback.slapps.fr/api/Sources")
             .then(result=>result.json())
@@ -45,16 +45,16 @@ class App extends Component {
     }
     toggleSource(sourceName){
         var updatedSources = []
-        this.state.sources.map(source=>{
-            var s;
-            if(source.name===sourceName){
-                s = source;
-                s.display = !s.display;
-            }else{
-                s = source;
-            }
-            updatedSources.push(s);
-        });
+            this.state.sources.map(source=>{
+                var s;
+                if(source.name===sourceName){
+                    s = source;
+                    s.display = !s.display;
+                }else{
+                    s = source;
+                }
+                updatedSources.push(s);
+            });
         this.setState({sources:updatedSources});
     }
     updateDate(date){
@@ -87,8 +87,12 @@ class App extends Component {
         return (
                 <div>
                 <h1>Apollo</h1>
+                <Grid>
+                <Row className="show-grid">
+                <Col xs={4} xsPush={8} md={4} mdPush={8}>                
                 <div>Date : {y+'-'+m+'-'+d}</div>
-                <button onClick={()=>this.updateDate(beforeDate)}>Before</button><button onClick={()=>this.updateDate(afterDate)}>After</button>
+                <Button onClick={()=>this.updateDate(beforeDate)}>Before</Button><Button onClick={()=>this.updateDate(afterDate)}>After</Button>
+                <hr/>
                 <div>Sources: {this.state.sources.map(source=>
                         <Source 
                         key={source.id}
@@ -97,25 +101,33 @@ class App extends Component {
                         onClick={()=>this.toggleSource(source.name)}
                         />)}
                 </div>
-                <table>
-                <tbody>
+                </Col>
+                <Col xs={8} xsPull={4} md={8} mdPull={4}>
+                <Table responsive striped hover>
+                <thead>
                 <tr>
-                <th>date</th>
-                <th>source</th>
-                <th>image</th>
-                <th>title</th>
+                <th>Date</th>
+                <th>Source</th>
+                <th>Image</th>
+                <th>Title</th>
                 </tr>
+                </thead>
+                <tbody>
                 {selectedTitles.map(title=>
                         <Title 
                         key={title.guid}
                         date={title.datetime}
                         source={title.source}
                         image={title.image_link}
+                        link={title.link}
                         title={title.title}
                         />
                         )}
         </tbody>
-            </table>
+            </Table>
+            </Col>
+            </Row>
+            </Grid>
             </div>
             );
     }
@@ -127,7 +139,7 @@ class Title extends Component {
                 <td>{time(this.props.date)}</td>
                 <td>{this.props.source}</td>
                 <td><img src={this.props.image} alt="" height="45"/></td>
-                <td>{this.props.title}</td>
+                <td><a href={this.props.link}>{this.props.title}</a></td>
                 </tr>
                );
     }
@@ -135,7 +147,7 @@ class Title extends Component {
 class Source extends Component {
     render() {
         return (
-                <Button bsStyle="primary" onClick={this.props.onClick}>{this.props.name} - {this.props.display?"Y":"N"}</Button>
+                <Button bsStyle={this.props.display?"primary":"default"} onClick={this.props.onClick}>{this.props.name}</Button>
                );
     }
 }
