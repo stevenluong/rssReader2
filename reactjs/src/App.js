@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 //import logo from './logo.svg';
 import './App.css';
 
@@ -134,7 +135,7 @@ class Title extends Component {
 class Source extends Component {
     render() {
         return (
-                <button onClick={this.props.onClick}>{this.props.name} - {this.props.display?"Y":"N"}</button>
+                <Button bsStyle="primary" onClick={this.props.onClick}>{this.props.name} - {this.props.display?"Y":"N"}</Button>
                );
     }
 }
