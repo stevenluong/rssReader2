@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, SectionList,YellowBox  } from 'react-native';
-import { Button, Header,ListItem,Avatar } from 'react-native-elements';
+import { StyleSheet, Text, View, ScrollView, SectionList,YellowBox,WebView  } from 'react-native';
+import { Button, Header,ListItem,Avatar,Icon } from 'react-native-elements';
 
 YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',
@@ -15,6 +15,8 @@ export default class App extends React.Component {
           this.state = {
               titles : [],
               sources : [],
+              webview : false,
+              link : "",
               date : new Date(),
                   //date : y,
           };
@@ -47,7 +49,15 @@ export default class App extends React.Component {
                 this.setState({titles:titles});
             });
     }
+    open(link){
+      console.log(link)
+      this.setState({
+        webview : true,
+        link : link});
+    }
    render() {
+
+var link = this.state.link;
      var date = this.state.date;
         var beforeDate = new Date(date.getTime());
         beforeDate.setDate(date.getDate()-1);
@@ -69,24 +79,25 @@ export default class App extends React.Component {
         selectedTitles.sort(function(a,b){
             return new Date(b.datetime) - new Date(a.datetime);
         })
-     const list = [
-       {
-         title: 'Appoazeoiazje oazejaioze azioej azoiej azoiej aoejazoiejaz ioejaz intments',
-         icon: 'av-timer'
-       },
-       {
-         title: 'Trips',
-         icon: 'flight-takeoff'
-       },
 
-]
        return (
 <View>
-<Header
-leftComponent={{ icon: 'menu', color: '#fff' }}
-centerComponent={{ text: 'Apollo', style: { color: '#fff' } }}
-rightComponent={{ icon: 'home', color: '#fff' }}
-/>
+<Header>
+
+<Icon name='menu' color='#fff' />
+<Text style={{color:"#fff"}}>Apollo</Text>
+<Icon name="rotate-right" color='#fff' onPress={()=>this.updateTitles()} />
+
+</Header>
+if(this.state.webview==true){
+  <View>
+  <Text>test</Text>
+    <WebView
+      source={{uri: link}}
+      style={{marginTop: 20}}
+    />
+  </View>
+}else{
 
 <ScrollView>
 {
@@ -95,19 +106,22 @@ selectedTitles.map((item, i) => (
          key={i}
          title={item.title}
          subtitle={item.source+"-"+time(item.datetime)}
-         avatar={<Avatar source={{uri:item.image_link}}/>}
+         onPress={()=>this.open(item.link)}
+         avatar={<Avatar source={{uri:item.image_link}} title="N/A"/>}
+
        />
 ))
 }
 </ScrollView>
-
+}
 
 </View>
 
 
 
 
-           );
+);
+
    }
 
 }
