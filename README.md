@@ -1,6 +1,4 @@
 # Apollo
 
-http://slapps.fr/apollo/
+http://apollo.slapps.fr/
 
-self memo 
-docker exec apollo_ror_1 rake db:migrate db:seed
