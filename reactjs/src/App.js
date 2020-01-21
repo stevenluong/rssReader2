@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button,Grid, Row, Col,Table } from 'react-bootstrap';
+import { Button,Grid, Row, Col,Table, Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 //import logo from './logo.svg';
 import './App.css';
 
@@ -12,7 +12,8 @@ class App extends Component {
             titles : [],
             sources : [],
             date : new Date(),
-                //date : y,
+            toggled : false,
+            //date : y,
         };
         fetch("http://apollo-loopback.slapps.fr/api/Sources")
             .then(result=>result.json())
@@ -45,17 +46,21 @@ class App extends Component {
     }
     toggleSource(sourceName){
         var updatedSources = []
-            this.state.sources.map(source=>{
-                var s;
-                if(source.name===sourceName){
-                    s = source;
-                    s.display = !s.display;
-                }else{
-                    s = source;
-                }
-                updatedSources.push(s);
-            });
+        this.state.sources.map(source=>{
+            var s;
+            if(source.name===sourceName){
+                s = source;
+                s.display = !s.display;
+            }else{
+                s = source;
+            }
+            updatedSources.push(s);
+        });
         this.setState({sources:updatedSources});
+    }
+    toggle(){
+        this.setState({toggled:!this.state.toggled});
+        console.log(this.state.toggled);
     }
     updateDate(date){
         this.setState({date:date},()=>{
@@ -86,10 +91,23 @@ class App extends Component {
         })
         return (
                 <div>
-                <h1>Apollo</h1>
-                <Grid>
-                <Row className="show-grid">
-                <Col xs={4} xsPush={8} md={4} mdPush={8}>                
+                <Navbar>
+                <Navbar.Header>
+                <Navbar.Brand>
+                <a href="#">Apollo</a>
+                </Navbar.Brand>
+                <Navbar.Toggle />
+                </Navbar.Header>
+                <Navbar.Collapse>
+                <Nav pullRight>
+                <NavItem eventKey={1} href="#" onClick={()=>this.toggle()}>
+                Filters
+                </NavItem>
+                </Nav>
+                </Navbar.Collapse>
+                </Navbar>
+                <div id="wrapper" className={this.state.toggled?"toggled":""}>
+                <div id="sidebar-wrapper">
                 <div>Date : {y+'-'+m+'-'+d}</div>
                 <Button onClick={()=>this.updateDate(beforeDate)}>Before</Button><Button onClick={()=>this.updateDate(afterDate)}>After</Button>
                 <hr/>
@@ -100,34 +118,32 @@ class App extends Component {
                         display={source.display}
                         onClick={()=>this.toggleSource(source.name)}
                         />)}
-                </div>
-                </Col>
-                <Col xs={8} xsPull={4} md={8} mdPull={4}>
-                <Table responsive striped hover>
-                <thead>
-                <tr>
-                <th>Date</th>
-                <th>Source</th>
-                <th>Image</th>
-                <th>Title</th>
-                </tr>
-                </thead>
-                <tbody>
-                {selectedTitles.map(title=>
-                        <Title 
-                        key={title.guid}
-                        date={title.datetime}
-                        source={title.source}
-                        image={title.image_link}
-                        link={title.link}
-                        title={title.title}
-                        />
-                        )}
+        </div>
+            </div>
+
+            <div id="page-content-wrapper">
+            <Table responsive striped hover>
+            <thead>
+            <tr>
+            <th>Image</th>
+            <th>Title</th>
+            </tr>
+            </thead>
+            <tbody>
+            {selectedTitles.map(title=>
+                    <Title 
+                    key={title.guid}
+                    date={title.datetime}
+                    source={title.source}
+                    image={title.image_link}
+                    link={title.link}
+                    title={title.title}
+                    />
+                    )}
         </tbody>
             </Table>
-            </Col>
-            </Row>
-            </Grid>
+            </div>
+            </div>
             </div>
             );
     }
@@ -136,10 +152,8 @@ class Title extends Component {
     render() {
         return (
                 <tr>
-                <td>{time(this.props.date)}</td>
-                <td>{this.props.source}</td>
-                <td><img src={this.props.image} alt="" height="45"/></td>
-                <td><a href={this.props.link}>{this.props.title}</a></td>
+                <td><img src={this.props.image} alt="" height="40"/></td>
+                <td><a href={this.props.link}>{this.props.title}</a><br/>{this.props.source} - {time(this.props.date)}</td>
                 </tr>
                );
     }
