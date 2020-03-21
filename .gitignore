@@ -7,5 +7,5 @@ ror/vendor/cache/
 tmp/
 *.swp
 *.swo
-
+.DS_Store
 

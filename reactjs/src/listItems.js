@@ -44,3 +44,13 @@ export const secondaryListItems = (
     </ListItem>
   </div>
 );
+export const thirdListItems = (
+  <div>
+    <ListItem button>
+      <ListItemIcon>
+        <AssignmentIcon />
+      </ListItemIcon>
+      <ListItemText primary="Log out" />
+    </ListItem>
+  </div>
+);
