@@ -3,24 +3,23 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
+import PersonIcon from '@material-ui/icons/Person';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import TripOriginIcon from '@material-ui/icons/TripOrigin';
 import LayersIcon from '@material-ui/icons/Layers';
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 
 export const mainListItems = (
   <div>
     <ListItem button>
       <ListItemIcon>
-        <DashboardIcon />
+        <LayersIcon />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <ShoppingCartIcon />
+        <BookmarkIcon />
       </ListItemIcon>
       <ListItemText primary="Topics" />
     </ListItem>
@@ -32,13 +31,13 @@ export const secondaryListItems = (
     <ListSubheader inset>Settings</ListSubheader>
     <ListItem button>
       <ListItemIcon>
-        <AssignmentIcon />
+        <TripOriginIcon />
       </ListItemIcon>
       <ListItemText primary="Sources" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <LayersIcon />
+        <PersonIcon />
       </ListItemIcon>
       <ListItemText primary="Profile" />
     </ListItem>
@@ -48,7 +47,7 @@ export const thirdListItems = (
   <div>
     <ListItem button>
       <ListItemIcon>
-        <AssignmentIcon />
+        <ExitToAppIcon />
       </ListItemIcon>
       <ListItemText primary="Log out" />
     </ListItem>

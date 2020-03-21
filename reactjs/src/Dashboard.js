@@ -23,6 +23,38 @@ import Keywords from './Keywords';
 import Day from './Day';
 import News from './News';
 
+function getNews(cb){
+  //var news = rows;
+  //news.push({})
+  //var start = new Date(currentDate);
+  var start = new Date();
+  //start.setDate(currentDate.getDate()-1);
+  start.setHours(0,0,0,0);
+  //TODO GOOD
+  var s = start.toISOString();
+  console.log("s:"+s);
+  var end = new Date();
+  end.setHours(23,59,59,999);
+  //TODO GOOD
+  var e = end.toISOString();
+  console.log("e:"+e);
+  fetch("http://apollo-loopback.slapps.fr/api/News?filter[where][and][0][datetime][gt]="+s+"&filter[where][and][1][datetime][lt]="+e)
+      .then(result=>result.json())
+      .then(titles=>{
+          console.log(titles);
+          //this.setState({titles:titles});
+          var news = []
+          titles.forEach(t =>{
+            //console.log(t.source);
+            if(["Challenges","JDG", "The Verge", "Korben", "LifeHacker"].indexOf(t.source)!=-1) //TODO - configure
+              news.push(t)
+          })
+          //news = titles;
+          cb(news);
+      });
+  //return news;
+}
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -120,6 +152,8 @@ const useStyles = makeStyles(theme => ({
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [fetch, setFetch] = React.useState(false)
+  const [news, setNews] = React.useState([])
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -127,7 +161,12 @@ export default function Dashboard() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  if(!fetch){
+    getNews(setNews);
+    setFetch(true);
+  }
 
+  //console.log(fetch);
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -174,23 +213,19 @@ export default function Dashboard() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            {/* Chart => Keywords of the day*/}
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <Keywords />
+          <Grid container direction="row" spacing={3}>
+            <Grid item xs={12} md={12} lg={9}>
+              <Paper className={classes.paper}>
+                <News news={news}/>
               </Paper>
             </Grid>
-            {/* Recent Deposits => Day*/}
-            <Grid item xs={12} md={4} lg={3}>
+            <Grid item xs={12} md={12} lg={3}>
               <Paper className={fixedHeightPaper}>
                 <Day />
               </Paper>
-            </Grid>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
+              <br/>
               <Paper className={classes.paper}>
-                <News />
+                <Keywords news={news}/>
               </Paper>
             </Grid>
           </Grid>
