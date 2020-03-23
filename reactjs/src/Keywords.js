@@ -1,6 +1,6 @@
 import React from 'react';
 import Title from './Title';
-
+import Link from '@material-ui/core/Link';
 
 
 export default function Keywords(props) {
@@ -32,7 +32,7 @@ export default function Keywords(props) {
       if(rawKeywords[i]){
       var keyword = rawKeywords[i].word
       var count = rawKeywords[i].count
-      filteredKeywords.push(<div key={i}><a href="/#">{keyword}</a> - {count}</div>)
+      filteredKeywords.push(<div key={i}><Link variant="subtitle2" href="/#">{keyword}</Link> - {count}</div>)
     }
   }
   console.log(keywords);

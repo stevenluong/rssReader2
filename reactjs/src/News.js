@@ -32,7 +32,7 @@ export default function News(props) {
               <TableCell><img src={n.image_link} height="50" width="50" alt=""/></TableCell>
               <TableCell>{n.datetime}</TableCell>
               <TableCell>{n.source}</TableCell>
-              <TableCell><a href={n.link}>{n.title} </a></TableCell>
+              <TableCell><Link variant="subtitle1" href={n.link}>{n.title} </Link></TableCell>
             </TableRow>
           ))}
         </TableBody>
