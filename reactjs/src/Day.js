@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Title from './Title';
 
 function preventDefault(event) {
@@ -24,7 +25,7 @@ export default function Day() {
       </Typography>
       <div>
         <Button color="primary" variant="contained" href="#" onClick={preventDefault}>
-          Before
+          <NavigateBeforeIcon />
         </Button>
         <Button color="primary" variant="contained" href="#" onClick={preventDefault}>
           Today

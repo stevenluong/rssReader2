@@ -12,6 +12,11 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { useOktaAuth } from '@okta/okta-react';
+import OktaAuth from '@okta/okta-auth-js';
+import { Redirect } from 'react-router-dom';
+import Alert from '@material-ui/lab/Alert';
+
 
 function Copyright() {
   return (
@@ -56,12 +61,51 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-function signin(){
-  console.log("signin")
-  window.location.href="/dashboard"
-}
-export default function SignInSide() {
+
+
+const SignInSide = ({baseUrl}) =>{
+
+  const { authState, authService } = useOktaAuth();
+  //console.log(authState.isAuthenticated)
   const classes = useStyles();
+  const [sessionToken, setSessionToken] = React.useState(null);
+  const [error, setError] = React.useState(null);
+  const [username, setUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const signin = (e) => {
+    e.preventDefault();
+    console.log("signin")
+    const oktaAuth = new OktaAuth({ url: baseUrl });
+    //window.location.href="/dashboard"
+    oktaAuth
+          .signIn({ username, password })
+          .then(res =>{
+            setSessionToken(res.sessionToken);
+            //console.log(res.sessionToken);
+            //window.location.href="/dashboard";
+          })
+          .catch(err => {
+            console.log('Found an error', err);
+            setError(err)
+          });
+  }
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+  const errorMessage = error ? (
+        <Alert severity="error">{error.message}</Alert>
+      ) : null;
+
+    if (sessionToken) {
+      authService.redirect({ sessionToken });
+      return null;
+    }
+
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -75,6 +119,7 @@ export default function SignInSide() {
             Sign in
           </Typography>
           <form className={classes.form} noValidate>
+            {errorMessage}
             <TextField
               variant="outlined"
               margin="normal"
@@ -85,6 +130,7 @@ export default function SignInSide() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={handleUsernameChange}
             />
             <TextField
               variant="outlined"
@@ -96,6 +142,7 @@ export default function SignInSide() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={handlePasswordChange}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -132,3 +179,4 @@ export default function SignInSide() {
     </Grid>
   );
 }
+export default SignInSide;

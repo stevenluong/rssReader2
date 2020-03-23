@@ -9,11 +9,12 @@ export default function Keywords(props) {
   props.news.map(n=>{
     var t = n.title;
     var s = t.split(" ")
-    s.map(i =>{
+    return s.map(i =>{
       if(i in keywords)
         keywords[i] = keywords[i]+1;
       else
         keywords[i] = 1
+      return keywords[i]
     })
   })
   var rawKeywords = []
@@ -27,19 +28,21 @@ export default function Keywords(props) {
   //console.log(rawKeywords)
   rawKeywords.sort(function(a, b){return b.count - a.count});
   var filteredKeywords = [];
-  for(var i=0;i<10;i++){
+  for(var i=0;i<20;i++){
       //console.log(rawKeywords);
-      if(rawKeywords[i]){
-      var keyword = rawKeywords[i].word
-      var count = rawKeywords[i].count
-      filteredKeywords.push(<div key={i}><Link variant="subtitle2" href="/#">{keyword}</Link> - {count}</div>)
-    }
+      if(rawKeywords[i] && rawKeywords[i].count>1){
+        var keyword = rawKeywords[i].word;
+        var count = rawKeywords[i].count;
+        filteredKeywords.push(<span key={i}><Link href="/#">{keyword}</Link> ({count}) </span>)
+      }
   }
-  console.log(keywords);
+  //console.log(keywords);
   return (
     <React.Fragment>
       <Title>Keywords</Title>
+      <p>
       {filteredKeywords}
+      </p>
     </React.Fragment>
   );
 }
