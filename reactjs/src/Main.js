@@ -34,11 +34,20 @@ import TripOriginIcon from '@material-ui/icons/TripOrigin';
 import LayersIcon from '@material-ui/icons/Layers';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 
+
+function processNews(news){
+  var processedNews = news;
+  var seen = {}
+  processedNews = news.filter((item)=> {return seen.hasOwnProperty(item.title)?false:(seen[item.title]=true)})
+  return processedNews;
+}
+
 function getNews(cb){
   //var news = rows;
   //news.push({})
   //var start = new Date(currentDate);
   var start = new Date();
+  start.setDate(start.getDate()-1);
   //start.setDate(currentDate.getDate()-1);
   start.setHours(0,0,0,0);
   //TODO GOOD
@@ -49,7 +58,9 @@ function getNews(cb){
   //TODO GOOD
   var e = end.toISOString();
   console.log("e:"+e);
-  fetch("https://apollo-loopback.slapps.fr/api/News?filter[where][and][0][datetime][gt]="+s+"&filter[where][and][1][datetime][lt]="+e)
+  var q = "https://apollo-loopback.slapps.fr/api/News?filter[where][and][0][datetime][gt]="+s+"&filter[where][and][1][datetime][lt]="+e
+  console.log(q)
+  fetch(q)
       .then(result=>result.json())
       .then(titles=>{
           console.log(titles);
@@ -60,6 +71,7 @@ function getNews(cb){
             if(["Challenges","JDG", "The Verge", "Korben", "LifeHacker"].indexOf(t.source)!==-1) //TODO - configure
               news.push(t)
           })
+          news = processNews(news);
           //news = titles;
           cb(news);
       });
