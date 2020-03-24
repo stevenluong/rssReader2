@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useOktaAuth } from '@okta/okta-react';
+import Alert from '@material-ui/lab/Alert';
+import OktaAuth from '@okta/okta-auth-js';
 
 function Copyright() {
   return (
@@ -47,9 +49,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignUp() {
+const SignUp = ({baseUrl}) => {
   const { authState, authService } = useOktaAuth();
   const classes = useStyles();
+  const [error, setError] = React.useState(null);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [firstName, setFirstName] = React.useState('');
@@ -58,6 +61,7 @@ export default function SignUp() {
   const [country, setCountry] = React.useState('');
   const signup = (e) =>{
     e.preventDefault();
+    const oktaAuth = new OktaAuth({ url: baseUrl });
       fetch('https://apollo-node.slapps.fr/api/users', {
         method: 'POST',
         headers: {
@@ -66,19 +70,23 @@ export default function SignUp() {
         },
         body: JSON.stringify({firstName,lastName, email, password})
       })
-        .then(user => {
-          this.oktaAuth
+        .then(res => {
+          console.log(res);
+          if(res.status&&res.status===400)
+            setError(res.statusText)
+          oktaAuth
             .signIn({
-              username: this.state.email,
-              password: this.state.password
+              username: email,
+              password: password
             })
             .then(res =>{
               setSessionToken(res.sessionToken)
-              authService.redirect({ sessionToken });
-              return null;
             });
         })
-        .catch(err => console.log);
+        .catch(err => {
+          setError(err.message)
+          console.log(err)
+        });
   };
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -95,6 +103,14 @@ export default function SignUp() {
   const handleCountryChange = (e) => {
     setCountry(e.target.value);
   };
+  const errorMessage = error ? (
+        <Alert severity="error">{error}</Alert>
+      ) : null;
+
+  if (sessionToken) {
+    authService.redirect({ sessionToken });
+    return null;
+  }
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -106,6 +122,7 @@ export default function SignUp() {
           Sign up
         </Typography>
         <form className={classes.form} noValidate>
+        {errorMessage}
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -201,3 +218,4 @@ export default function SignUp() {
     </Container>
   );
 }
+export default SignUp;
