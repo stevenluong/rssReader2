@@ -157,7 +157,7 @@ const useStyles = makeStyles(theme => ({
 export default function Main({url}) {
   const { authState, authService } = useOktaAuth();
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [fetch, setFetch] = React.useState(false)
   const [news, setNews] = React.useState([])
   const handleDrawerOpen = () => {
