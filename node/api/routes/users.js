@@ -17,8 +17,7 @@ router.post('/', (req, res, next) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
-      login: req.body.email,
-      country : req.body.country
+      login: req.body.email
     },
     credentials: {
       password: {
