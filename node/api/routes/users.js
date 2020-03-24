@@ -28,6 +28,11 @@ router.post('/', (req, res, next) => {
   };
   oktaClient
     .createUser(newUser)
+    .catch(err => {
+      console.log(err)
+      res.status(400);
+      res.send(err.message);
+    });
     .then(user => {
       console.log(user)
       res.status(201);
