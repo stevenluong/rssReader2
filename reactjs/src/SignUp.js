@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { useOktaAuth } from '@okta/okta-react';
 
 function Copyright() {
   return (
@@ -47,8 +48,53 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SignUp() {
+  const { authState, authService } = useOktaAuth();
   const classes = useStyles();
-
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+  const [sessionToken, setSessionToken] = React.useState(null);
+  const [country, setCountry] = React.useState('');
+  const signup = (e) =>{
+    e.preventDefault();
+      fetch('https://apollo-node/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          //mode: 'no-cors'
+        },
+        body: JSON.stringify({firstName,lastName, email, password})
+      })
+        .then(user => {
+          this.oktaAuth
+            .signIn({
+              username: this.state.email,
+              password: this.state.password
+            })
+            .then(res =>{
+              setSessionToken(res.sessionToken)
+              authService.redirect({ sessionToken });
+              return null;
+            });
+        })
+        .catch(err => console.log);
+  };
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+  const handleFirstNameChange = (e) => {
+    setFirstName(e.target.value);
+  };
+  const handleLastNameChange = (e) => {
+    setLastName(e.target.value);
+  };
+  const handleCountryChange = (e) => {
+    setCountry(e.target.value);
+  };
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -71,6 +117,7 @@ export default function SignUp() {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                onChange={handleFirstNameChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -82,6 +129,7 @@ export default function SignUp() {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                onChange={handleLastNameChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -93,6 +141,7 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={handleEmailChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -105,12 +154,25 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={handlePasswordChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="country"
+                label="Country"
+                name="country"
+                autoComplete="country"
+                onChange={handleCountryChange}
               />
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
+                label="I agree to I want to receive updates by email from Steven Luong. I consent Steven Luong processing my personal data. I uderstand that I can withdraw my consent at any time."
               />
             </Grid>
           </Grid>
@@ -120,12 +182,13 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={signup}
           >
-            Sign Up
+              Sign Up
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="/signin" variant="body2">
+              <Link href="/login" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
