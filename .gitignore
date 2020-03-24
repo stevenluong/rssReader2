@@ -1,6 +1,7 @@
 ror/log/
 bower_components/
 node_modules/
+OLD/
 ror/public/assets/
 ror/vendor/bundle/
 ror/vendor/cache/
