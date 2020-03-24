@@ -64,7 +64,7 @@ services:
         #    - nginx_default
     reactjs:
         build: reactjs/.
-        command: http-server ./build/. -p 80
+        command: serve -s ./build/. -p 80
         depends_on: 
             - loopback
         #ports:

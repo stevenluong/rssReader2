@@ -49,7 +49,7 @@ function getNews(cb){
   //TODO GOOD
   var e = end.toISOString();
   console.log("e:"+e);
-  fetch("http://apollo-loopback.slapps.fr/api/News?filter[where][and][0][datetime][gt]="+s+"&filter[where][and][1][datetime][lt]="+e)
+  fetch("https://apollo-loopback.slapps.fr/api/News?filter[where][and][0][datetime][gt]="+s+"&filter[where][and][1][datetime][lt]="+e)
       .then(result=>result.json())
       .then(titles=>{
           console.log(titles);
