@@ -58,7 +58,7 @@ export default function SignUp() {
   const [country, setCountry] = React.useState('');
   const signup = (e) =>{
     e.preventDefault();
-      fetch('https://apollo-node/api/users', {
+      fetch('https://apollo-node.slapps.fr/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
