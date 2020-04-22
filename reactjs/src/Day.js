@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import moment from 'moment';
 import Title from './Title';
 
 function preventDefault(event) {
@@ -19,9 +20,9 @@ export default function Day() {
   const classes = useStyles();
   return (
     <React.Fragment>
-      <Title>21/03/2020</Title>
+      <Title>{moment().format("DD/MM/YYYY")}</Title>
       <Typography color="textSecondary" className={classes.depositContext}>
-        Updated on 21/03/2020 09:00
+        Updated on {moment().format("DD/MM/YYYY HH:00")}
       </Typography>
       <div>
         <Button color="primary" variant="contained" href="#" onClick={preventDefault}>

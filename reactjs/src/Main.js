@@ -20,8 +20,9 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useOktaAuth } from '@okta/okta-react';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
+import logo from './Common/logo.png';
 
-import Profile from './Profile';
+import Profile from './User/Profile';
 import Dashboard from './Dashboard';
 
 import ListItem from '@material-ui/core/ListItem';
@@ -34,6 +35,44 @@ import TripOriginIcon from '@material-ui/icons/TripOrigin';
 import LayersIcon from '@material-ui/icons/Layers';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 
+var config = {
+  //server : "http://localhost:8529", // local
+  server : "https://athena.slapps.fr",
+  //dbUrl : "/_db/_system/hephaistos" // local
+  dbUrl : "/_db/production/apollo"
+}
+
+function getUser(user,cb){
+  var q = config.server+config.dbUrl+"/users/"+user.sub
+  console.log(q)
+  fetch(q)
+      .then(result=>result.json())
+      .then(u=>{
+          if(u.length==0)
+            createUser(user, cb);
+            else{
+              cb(Object.assign(user,u[0]));
+            }
+          //console.log(u);
+
+      });
+}
+function createUser(user,cb){
+  var q = config.server+config.dbUrl+"/users/"
+  console.log(q)
+  fetch(q,{
+    method:'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  })
+      .then(result=>result.json())
+      .then(u=>{
+          //console.log(u);
+          cb(Object.assign(user,u));
+      });
+}
 
 function processNews(news){
   var processedNews = news;
@@ -170,7 +209,8 @@ export default function Main({url}) {
   const { authState, authService } = useOktaAuth();
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [fetch, setFetch] = React.useState(false)
+  const [userRequested, setUserRequested] = React.useState(false);
+  const [user, setUser] = React.useState({_key:0});
   const [news, setNews] = React.useState([])
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -181,20 +221,35 @@ export default function Main({url}) {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   console.log(authState.isAuthenticated);
   if (authState.isPending) {
-    return <div>Loading...</div>;
+    return (
+    <div className="App">
+      <header className="App-header">
+    <img src={logo} className="App-logo" alt="logo" />
+    <p>Loading ...</p>
+    </header>
+  </div>)
   }
   if(!authState.isAuthenticated)
     return(
       <Redirect to={{ pathname: '/login' }}/>
     )
-  if(!fetch){
-    getNews(setNews);
-    setFetch(true);
-  }
+    if(!userRequested){
+      setUserRequested(true);
+      authService.getUser().then((info) => {
+        //setUserInfo(info);
+        //console.log(info);
+        getUser(info, (u)=>{
+          console.log(u)
+          setUser(u)
+          getNews(setNews);
+        });
+        //setUser(info)
+      });
+    }
   console.log(url)
   var content = null;
   if(url==="profile")
-    content = <Profile/>
+    content = <Profile user={user} />
   if(url==="dashboard")
     content = <Dashboard news={news}/>
 

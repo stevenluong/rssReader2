@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Route, useHistory, Switch } from 'react-router-dom';
 import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
-import SignInSide from './SignInSide';
-import SignUp from './SignUp';
+import SignInSide from './User/SignInSide';
+import SignUp from './User/SignUp';
 import Main from './Main';
-import Profile from './Profile';
-import config from './app.config';
-import Notfound from './NotFound'
+import Profile from './User/Profile';
+import config from './User/app.config';
+import Notfound from './Common/NotFound'
 
 const AppWithRouterAccess = () => {
   const history = useHistory();

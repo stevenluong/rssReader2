@@ -62,7 +62,7 @@ const SignUp = ({baseUrl}) => {
   const signup = (e) =>{
     e.preventDefault();
     const oktaAuth = new OktaAuth({ url: baseUrl });
-      fetch('https://apollo-node.slapps.fr/api/users', {
+      fetch('https://athena-node.slapps.fr/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -175,21 +175,9 @@ const SignUp = ({baseUrl}) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="country"
-                label="Country"
-                name="country"
-                autoComplete="country"
-                onChange={handleCountryChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I agree to I want to receive updates by email from Steven Luong. I consent Steven Luong processing my personal data. I uderstand that I can withdraw my consent at any time."
+                label="I agree to I want to receive updates by email from Steven Luong. I consent Steven Luong processing my personal data. I understand that I can withdraw my consent at any time."
               />
             </Grid>
           </Grid>
