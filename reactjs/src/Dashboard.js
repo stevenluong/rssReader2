@@ -10,8 +10,6 @@ import Day from './Day';
 import News from './News';
 
 
-const drawerWidth = 240;
-
 const useStyles = makeStyles(theme => ({
 
   title: {
@@ -28,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Dashboard({news}) {
+export default function Dashboard({news, filteredNews, filters, setFilters, setFiltered}) {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -37,7 +35,7 @@ export default function Dashboard({news}) {
     <Grid container direction="row" spacing={3}>
       <Grid item xs={7} md={12} lg={9}>
         <Paper className={classes.paper}>
-          <Keywords news={news}/>
+          <Keywords news={news} filters={filters} setFilters={setFilters} setFiltered={setFiltered}/>
         </Paper>
       </Grid>
       <Grid item xs={5} md={12} lg={3}>
@@ -49,7 +47,7 @@ export default function Dashboard({news}) {
     <br/>
     <Grid item xs={12} md={12} lg={12}>
       <Paper className={classes.paper}>
-        <News news={news}/>
+        <News news={news} filteredNews={filteredNews}/>
       </Paper>
     </Grid>
     </React.Fragment>

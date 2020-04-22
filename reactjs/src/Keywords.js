@@ -3,10 +3,10 @@ import Title from './Title';
 import Link from '@material-ui/core/Link';
 
 
-export default function Keywords(props) {
+export default function Keywords({news, filters, setFilters, setFiltered}) {
   var keywords = {}
   //console.log(props.news)
-  props.news.map(n=>{
+  news.map(n=>{
     var t = n.title;
     var s = t.split(" ")
     return s.map(i =>{
@@ -25,23 +25,25 @@ export default function Keywords(props) {
         count:keywords[key]
       })
   }
+  const handleKeywordAdd = (k) => {
+    //var f = filters;
+    console.log(k);
+    //var f = Object.assign(filters, {keywords:[...filters.keywords,k]})
+    var f = Object.assign(filters, {keywords:[k]})
+    setFilters(f);
+    setFiltered(false);
+  }
   //console.log(rawKeywords)
   rawKeywords.sort(function(a, b){return b.count - a.count});
-  var filteredKeywords = [];
-  for(var i=0;i<20;i++){
-      //console.log(rawKeywords);
-      if(rawKeywords[i] && rawKeywords[i].count>1){
-        var keyword = rawKeywords[i].word;
-        var count = rawKeywords[i].count;
-        filteredKeywords.push(<span key={i}><Link href="/#">{keyword}</Link> ({count}) </span>)
-      }
-  }
+  rawKeywords = rawKeywords.slice(0,20);
   //console.log(keywords);
   return (
     <React.Fragment>
       <Title>Keywords</Title>
       <p>
-      {filteredKeywords}
+      {rawKeywords.map((k,i) => (
+        <span key={i}><Link onClick={()=>handleKeywordAdd(k.word)}>{k.word}</Link> ({k.count}) </span>
+      ))}
       </p>
     </React.Fragment>
   );

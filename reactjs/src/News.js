@@ -8,10 +8,10 @@ import Button from '@material-ui/core/Button';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 
-export default function News(props) {
+export default function News({filteredNews}) {
   //var cleanedNews = props.news;
-  var sortedNews = props.news.sort((a,b)=>(new Date(b.datetime))-(new Date(a.datetime)))
-  console.log(sortedNews)
+  var sortedNews = filteredNews.sort((a,b)=>(new Date(b.datetime))-(new Date(a.datetime)))
+  //console.log(sortedNews)
   return (
     <React.Fragment>
       <Title id="news">News</Title>

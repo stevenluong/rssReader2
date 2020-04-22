@@ -12,8 +12,6 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -48,7 +46,7 @@ function getUser(user,cb){
   fetch(q)
       .then(result=>result.json())
       .then(u=>{
-          if(u.length==0)
+          if(u.length===0)
             createUser(user, cb);
             else{
               cb(Object.assign(user,u[0]));
@@ -91,23 +89,23 @@ function getNews(cb){
   start.setHours(0,0,0,0);
   //TODO GOOD
   var s = start.toISOString();
-  console.log("s:"+s);
+  //console.log("s:"+s);
   var end = new Date();
   end.setHours(23,59,59,999);
   //TODO GOOD
   var e = end.toISOString();
-  console.log("e:"+e);
+  //console.log("e:"+e);
   var q = "https://apollo-loopback.slapps.fr/api/News?filter[where][and][0][datetime][gt]="+s+"&filter[where][and][1][datetime][lt]="+e
   console.log(q)
   fetch(q)
       .then(result=>result.json())
       .then(titles=>{
-          console.log(titles);
+          //console.log(titles);
           //this.setState({titles:titles});
           var news = []
           titles.forEach(t =>{
             //console.log(t.source);
-            if(["Challenges","JDG", "The Verge", "Korben", "LifeHacker"].indexOf(t.source)!==-1) //TODO - configure
+            //if(["Challenges","JDG", "The Verge", "Korben", "LifeHacker"].indexOf(t.source)!==-1) //TODO - configure
               news.push(t)
           })
           news = processNews(news);
@@ -208,18 +206,26 @@ const useStyles = makeStyles(theme => ({
 export default function Main({url}) {
   const { authState, authService } = useOktaAuth();
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [userRequested, setUserRequested] = React.useState(false);
   const [user, setUser] = React.useState({_key:0});
   const [news, setNews] = React.useState([])
+  const [filtered, setFiltered] = React.useState(false)
+  const [filteredNews, setFilteredNews] = React.useState([])
+  const [filters, setFilters] = React.useState({
+    sources:["Challenges","JDG", "The Verge", "Korben", "LifeHacker"],
+    keywords:[],
+    noKeywords:[],
+    topics:[]
+  })
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  console.log(authState.isAuthenticated);
+  //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  //console.log(authState.isAuthenticated);
   if (authState.isPending) {
     return (
     <div className="App">
@@ -246,12 +252,40 @@ export default function Main({url}) {
         //setUser(info)
       });
     }
-  console.log(url)
+  //console.log(filteredNews);
+  console.log(filters);
+  if(!filtered && news.length!=0){
+    setFiltered(true);
+    var f = [];
+    console.log(news);
+    news.forEach(n =>{
+      //console.log(t.source);
+      if(filters.sources.indexOf(n.source)!==-1) //TODO - configure
+        f.push(n)
+    })
+    setFilteredNews(f);
+    console.log(f);
+  }
+  console.log(filtered);
+  console.log(filteredNews.length);
+  if(!filtered && filteredNews.length!=0){
+    setFiltered(true);
+    var f = [];
+    console.log(news);
+    news.forEach(n =>{
+      //console.log(t.source);
+      if(filters.sources.indexOf(n.source)!==-1 && n.title.split(" ").indexOf(filters.keywords[0])!==-1) //TODO - configure
+        f.push(n)
+    })
+    setFilteredNews(f);
+    console.log(f);
+  }
+  //console.log(url)
   var content = null;
   if(url==="profile")
     content = <Profile user={user} />
   if(url==="dashboard")
-    content = <Dashboard news={news}/>
+    content = <Dashboard news={news} filteredNews={filteredNews} setFilters={setFilters} filters={filters} setFiltered={setFiltered}/>
 
   //console.log(fetch);
   return (
@@ -293,15 +327,13 @@ export default function Main({url}) {
         <Divider />
         <List>
         <div>
-          <RouterLink to='/'>
-            <ListItem button>
+            <ListItem button component={RouterLink} to="/">
               <ListItemIcon>
                 <LayersIcon />
               </ListItemIcon>
               <ListItemText primary="Dashboard" />
             </ListItem>
-          </RouterLink>
-          <ListItem button>
+            <ListItem button component={RouterLink} to="/topics">
             <ListItemIcon>
               <BookmarkIcon />
             </ListItemIcon>
@@ -313,20 +345,18 @@ export default function Main({url}) {
         <List>
         <div>
           <ListSubheader inset>Settings</ListSubheader>
-          <ListItem button>
+          <ListItem button component={RouterLink} to="/sources">
             <ListItemIcon>
               <TripOriginIcon />
             </ListItemIcon>
             <ListItemText primary="Sources" />
           </ListItem>
-          <RouterLink to='/profile'>
-          <ListItem button>
+          <ListItem button component={RouterLink} to="/profile">
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
             <ListItemText primary="Profile" />
           </ListItem>
-          </RouterLink>
         </div>
         </List>
         <Divider />

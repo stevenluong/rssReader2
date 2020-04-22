@@ -14,7 +14,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useOktaAuth } from '@okta/okta-react';
 import OktaAuth from '@okta/okta-auth-js';
-import { Redirect } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 
 
@@ -65,7 +64,7 @@ const useStyles = makeStyles(theme => ({
 
 const SignInSide = ({baseUrl}) =>{
 
-  const { authState, authService } = useOktaAuth();
+  const { authService } = useOktaAuth();
   //console.log(authState.isAuthenticated)
   const classes = useStyles();
   const [sessionToken, setSessionToken] = React.useState(null);
