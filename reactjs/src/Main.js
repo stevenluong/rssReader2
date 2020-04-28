@@ -33,6 +33,8 @@ import TripOriginIcon from '@material-ui/icons/TripOrigin';
 import LayersIcon from '@material-ui/icons/Layers';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 
+import moment from 'moment';
+
 var config = {
   //server : "http://localhost:8529", // local
   server : "https://athena.slapps.fr",
@@ -106,6 +108,7 @@ function getNews(cb){
           titles.forEach(t =>{
             //console.log(t.source);
             //if(["Challenges","JDG", "The Verge", "Korben", "LifeHacker"].indexOf(t.source)!==-1) //TODO - configure
+              t.time = moment(t.datetime).format("HH:mm")
               news.push(t)
           })
           news = processNews(news);
@@ -206,7 +209,7 @@ const useStyles = makeStyles(theme => ({
 export default function Main({url}) {
   const { authState, authService } = useOktaAuth();
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [userRequested, setUserRequested] = React.useState(false);
   const [user, setUser] = React.useState({_key:0});
   const [news, setNews] = React.useState([])
@@ -254,9 +257,10 @@ export default function Main({url}) {
     }
   //console.log(filteredNews);
   console.log(filters);
-  if(!filtered && news.length!=0){
+  if(!filtered && news.length!==0){
     setFiltered(true);
     var f = [];
+    console.log("news");
     console.log(news);
     news.forEach(n =>{
       //console.log(t.source);
@@ -266,16 +270,36 @@ export default function Main({url}) {
     setFilteredNews(f);
     console.log(f);
   }
+
+  //FILTER
   console.log(filtered);
   console.log(filteredNews.length);
-  if(!filtered && filteredNews.length!=0){
+  if(!filtered && filteredNews.length!==0){
     setFiltered(true);
     var f = [];
     console.log(news);
+    console.log("filtered news");
     news.forEach(n =>{
       //console.log(t.source);
-      if(filters.sources.indexOf(n.source)!==-1 && n.title.split(" ").indexOf(filters.keywords[0])!==-1) //TODO - configure
+      if (filters.sources.indexOf(n.source)===-1)
+        return false
+      if(filters.keywords.length===0 && filters.noKeywords.length===0){
         f.push(n)
+        return false
+      }
+      var split = n.title.split(" ");
+
+      //if(split.indexOf("trump")===-1)
+      //  return false
+      //console.log(split);
+      if(filters.noKeywords.length>0 && split.indexOf(filters.noKeywords[0])!==-1)
+        return false;
+      if(filters.keywords.length===0){
+        f.push(n);
+        return false;
+      }
+      if(split.indexOf(filters.keywords[0])!==-1)
+        f.push(n);
     })
     setFilteredNews(f);
     console.log(f);

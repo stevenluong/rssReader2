@@ -28,27 +28,25 @@ const useStyles = makeStyles(theme => ({
 
 export default function Dashboard({news, filteredNews, filters, setFilters, setFiltered}) {
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const paper = clsx(classes.paper);
 
   return (
     <React.Fragment>
     <Grid container direction="row" spacing={3}>
-      <Grid item xs={7} md={12} lg={9}>
+      <Grid item xs={12} md={9} lg={9}>
         <Paper className={classes.paper}>
+          <News news={news} filteredNews={filteredNews}/>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} md={3} lg={3}>
+        <Paper className={paper}>
+          <Day />
+        </Paper>
+        <br/>
+        <Paper className={paper}>
           <Keywords news={news} filters={filters} setFilters={setFilters} setFiltered={setFiltered}/>
         </Paper>
       </Grid>
-      <Grid item xs={5} md={12} lg={3}>
-        <Paper className={fixedHeightPaper}>
-          <Day />
-        </Paper>
-      </Grid>
-    </Grid>
-    <br/>
-    <Grid item xs={12} md={12} lg={12}>
-      <Paper className={classes.paper}>
-        <News news={news} filteredNews={filteredNews}/>
-      </Paper>
     </Grid>
     </React.Fragment>
   );

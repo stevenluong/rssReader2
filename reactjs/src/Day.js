@@ -24,14 +24,6 @@ export default function Day() {
       <Typography color="textSecondary" className={classes.depositContext}>
         Updated on {moment().format("DD/MM/YYYY HH:00")}
       </Typography>
-      <div>
-        <Button color="primary" variant="contained" href="#" onClick={preventDefault}>
-          <NavigateBeforeIcon />
-        </Button>
-        <Button color="primary" variant="contained" href="#" onClick={preventDefault}>
-          Today
-        </Button>
-      </div>
     </React.Fragment>
   );
 }

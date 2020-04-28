@@ -7,6 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import Button from '@material-ui/core/Button';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
+import Hidden from '@material-ui/core/Hidden';
 
 export default function News({filteredNews}) {
   //var cleanedNews = props.news;
@@ -18,8 +19,9 @@ export default function News({filteredNews}) {
       <Table size="small">
         <TableHead>
           <TableRow>
+          <Hidden smDown>
             <TableCell>Image</TableCell>
-            <TableCell>Time</TableCell>
+          </Hidden>
             <TableCell>Source</TableCell>
             <TableCell>Title</TableCell>
           </TableRow>
@@ -27,9 +29,10 @@ export default function News({filteredNews}) {
         <TableBody>
           {sortedNews.map(n => (
             <TableRow key={n.guid}>
+            <Hidden smDown>
               <TableCell><img src={n.image_link} height="40" width="40" alt=""/></TableCell>
-              <TableCell>{n.datetime}</TableCell>
-              <TableCell>{n.source}</TableCell>
+            </Hidden>
+              <TableCell>{n.source} <br/> <small>{n.time}</small></TableCell>
               <TableCell><Link href={n.link}>{n.title} </Link></TableCell>
             </TableRow>
           ))}
