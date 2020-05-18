@@ -21,8 +21,8 @@ export default function News({filteredNews}) {
           <TableRow>
           <Hidden smDown>
             <TableCell>Image</TableCell>
-          </Hidden>
             <TableCell>Source</TableCell>
+          </Hidden>
             <TableCell>Title</TableCell>
           </TableRow>
         </TableHead>
@@ -31,8 +31,8 @@ export default function News({filteredNews}) {
             <TableRow key={n.guid}>
             <Hidden smDown>
               <TableCell><img src={n.image_link} height="40" width="40" alt=""/></TableCell>
-            </Hidden>
               <TableCell>{n.source} <br/> <small>{n.time}</small></TableCell>
+            </Hidden>
               <TableCell><Link href={n.link}>{n.title} </Link></TableCell>
             </TableRow>
           ))}
