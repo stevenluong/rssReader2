@@ -306,7 +306,7 @@ export default function Main({url}) {
     console.log(news);
     news.forEach(n =>{
       //console.log(t.source);
-      if(filters.sources.indexOf(n.source)!==-1) //TODO - configure
+      if(filters.sources.indexOf(n.source)!==-1)
         f.push(n)
     })
     setFilteredNews(f);
@@ -334,7 +334,13 @@ export default function Main({url}) {
       //if(split.indexOf("trump")===-1)
       //  return false
       //console.log(split);
-      if(filters.noKeywords.length>0 && split.indexOf(filters.noKeywords[0])!==-1)
+      var intersectionNoKeywords = split.filter(x => {
+        if(filters.noKeywords.indexOf(x) != -1)
+      		return true;
+      	else
+      		return false;
+      })
+      if(intersectionNoKeywords.length>0)
         return false;
       if(filters.keywords.length===0){
         f.push(n);

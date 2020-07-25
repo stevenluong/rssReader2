@@ -44,7 +44,7 @@ export default function Dashboard({news, filteredNews, filters, setFilters, setF
         </Paper>
         <br/>
         <Paper className={paper}>
-          <Keywords news={news} filters={filters} setFilters={setFilters} setFiltered={setFiltered}/>
+          <Keywords filteredNews={filteredNews} filters={filters} setFilters={setFilters} setFiltered={setFiltered}/>
         </Paper>
       </Grid>
     </Grid>

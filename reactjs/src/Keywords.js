@@ -6,12 +6,14 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import Checkbox from '@material-ui/core/Checkbox';
 import RemoveIcon from '@material-ui/icons/Remove';
+import BackspaceIcon from '@material-ui/icons/Backspace';
+import BackspaceOutlinedIcon from '@material-ui/icons/BackspaceOutlined';
 import { createMuiTheme, withStyles, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 
-export default function Keywords({news, filters, setFilters, setFiltered}) {
+export default function Keywords({filteredNews, filters, setFilters, setFiltered}) {
   var keywords = {}
   //console.log(props.news)
-  news.map(n=>{
+  filteredNews.map(n=>{
     var t = n.title;
     var s = t.split(" ")
     return s.map(i =>{
@@ -72,9 +74,6 @@ export default function Keywords({news, filters, setFilters, setFiltered}) {
   rawKeywords.sort(function(a, b){return b.count - a.count});
   rawKeywords = rawKeywords.slice(0,20);
 
-  const checked = (keyword) => {
-    return filters.noKeywords.indexOf(keyword)!=-1
-  }
   //console.log(keywords);
   return (
     <React.Fragment>
@@ -91,15 +90,20 @@ export default function Keywords({news, filters, setFilters, setFiltered}) {
           onClick={()=>handleKeywordChange(k.word)}
         />
         <Link onClick={()=>handleKeywordChange(k.word)}>{k.word}</Link> ({k.count})
-        <Checkbox
-        checked={checked(k.word)}
-        indeterminate
-        size="small"
-        onClick={()=>handleNoKeywordChange(k.word)}
-      />
-
-
-
+      <IconButton
+      size="small"
+      onClick={()=>handleNoKeywordChange(k.word)}
+      style={filters.noKeywords.indexOf(k.word)!=-1?{}:{ display: 'none' }}
+      >
+        <BackspaceIcon fontSize="inherit"/>
+      </IconButton>
+      <IconButton
+      size="small"
+      onClick={()=>handleNoKeywordChange(k.word)}
+      style={filters.noKeywords.indexOf(k.word)!=-1?{display: 'none'}:{}}
+      >
+        <BackspaceOutlinedIcon fontSize="inherit"/>
+      </IconButton>
 
         <br/>
         </React.Fragment>
