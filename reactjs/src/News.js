@@ -12,6 +12,9 @@ import Hidden from '@material-ui/core/Hidden';
 export default function News({filteredNews}) {
   //var cleanedNews = props.news;
   var sortedNews = filteredNews.sort((a,b)=>(new Date(b.datetime))-(new Date(a.datetime)))
+  const imgStyle = {
+    "objectFit": "cover",
+  };
   //console.log(sortedNews)
   return (
     <React.Fragment>
@@ -30,7 +33,7 @@ export default function News({filteredNews}) {
           {sortedNews.map(n => (
             <TableRow key={n.link}>
             <Hidden smDown>
-              <TableCell><img src={n.image_link} height="40" width="40" alt=""/></TableCell>
+              <TableCell><img style={imgStyle} src={n.image_link} height="40" width="40" alt=""/></TableCell>
               <TableCell>{n.source} <br/> <small>{n.time}</small></TableCell>
             </Hidden>
               <TableCell><Link href={n.link}>{n.title} </Link></TableCell>

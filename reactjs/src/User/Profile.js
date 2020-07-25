@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-export default function Profile({user,setUser, editUser}) {
+export default function Profile({user,setUser, updateUser}) {
   const classes = useStyles();
 
   const [edit, setEdit] = React.useState(false);
@@ -40,13 +40,12 @@ export default function Profile({user,setUser, editUser}) {
     setUser({...user, salary:e.target.value});
   };
 
-
   const handleEdit = () => {
     setEdit(true);
     //removeAsset(asset)
   };
   const handleSave = () => {
-    editUser(user)
+    updateUser(user)
     setEdit(false);
   };
   return (

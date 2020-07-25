@@ -21,6 +21,7 @@ import { Link as RouterLink, Redirect } from 'react-router-dom';
 import logo from './Common/logo.png';
 
 import Profile from './User/Profile';
+import Sources from './Sources';
 import Dashboard from './Dashboard';
 
 import ListItem from '@material-ui/core/ListItem';
@@ -58,6 +59,8 @@ function getUser(user,cb){
 
       });
 }
+
+
 function createUser(user,cb){
   var q = config.server+config.usersDbUrl+"/users/"
   console.log(q)
@@ -75,11 +78,38 @@ function createUser(user,cb){
       });
 }
 
+function updateUser(user){
+  var q = config.server+config.usersDbUrl+"/users/"+user._key
+  console.log(q)
+  fetch(q,{
+    method:'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  })
+      .then(result=>result.json())
+      .then(u=>{
+          console.log(u);
+          console.log("User updated");
+      });
+}
 function processNews(news){
   var processedNews = news;
   var seen = {}
   processedNews = news.filter((item)=> {return seen.hasOwnProperty(item.title)?false:(seen[item.title]=true)})
   return processedNews;
+}
+
+function getSources(cb){
+  var q = config.server+config.dbUrl+"/sources"
+  console.log(q)
+  fetch(q)
+      .then(result=>result.json())
+      .then(sources=>{
+          cb(sources);
+          //console.log(u);
+      });
 }
 
 function getNews(cb){
@@ -214,11 +244,13 @@ export default function Main({url}) {
   const [open, setOpen] = React.useState(false);
   const [userRequested, setUserRequested] = React.useState(false);
   const [user, setUser] = React.useState({_key:0});
+  const [sources, setSources] = React.useState([]);
   const [news, setNews] = React.useState([])
   const [filtered, setFiltered] = React.useState(false)
   const [filteredNews, setFilteredNews] = React.useState([])
   const [filters, setFilters] = React.useState({
-    sources:["Challenges","JDG", "The Verge", "Korben", "LifeHacker"],
+    //TODO - Sources per user
+    sources:[],
     keywords:[],
     noKeywords:[],
     topics:[]
@@ -252,7 +284,15 @@ export default function Main({url}) {
         getUser(info, (u)=>{
           console.log(u)
           setUser(u)
+          getSources(setSources);
           getNews(setNews);
+          var sources = [];
+          if(!u.sources || u.sources.length==0)
+            sources = ["BBC","ABC"];
+          else
+            sources = u.sources
+          var f = Object.assign(filters, {sources: sources})
+          setFilters(f);
         });
         //setUser(info)
       });
@@ -309,7 +349,9 @@ export default function Main({url}) {
   //console.log(url)
   var content = null;
   if(url==="profile")
-    content = <Profile user={user} />
+    content = <Profile user={user} setUser={setUser} updateUser={updateUser}/>
+  if(url==="sources")
+    content = <Sources user={user} setUser={setUser} sources={sources} setFilters={setFilters} filters={filters} setFiltered={setFiltered} updateUser={updateUser}/>
   if(url==="dashboard")
     content = <Dashboard news={news} filteredNews={filteredNews} setFilters={setFilters} filters={filters} setFiltered={setFiltered}/>
 
@@ -370,7 +412,6 @@ export default function Main({url}) {
         <Divider />
         <List>
         <div>
-          <ListSubheader inset>Settings</ListSubheader>
           <ListItem button component={RouterLink} to="/sources">
             <ListItemIcon>
               <TripOriginIcon />

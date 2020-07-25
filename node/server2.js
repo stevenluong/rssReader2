@@ -127,13 +127,20 @@ function read(sourceName,item){
     if(item.enclosures[0]!=undefined){
         img = item.enclosures[0].url;
     };
+    if(sourceName=="ABC"){
+        img=item.image.url;
+        //console.log(img);
+        //if(img==""){
+        //  console.log(item);
+        //}
+    }
 
     if(sourceName=="The Verge")
         img=getImageLink(item,'src="','"');
     if(sourceName=="Korben")
         img=getImageLink(item,'src="','"');
     if(sourceName=="BBC")
-        img=item.image.url;
+        img="https://news.bbcimg.co.uk/nol/shared/img/bbc_news_120x60.gif";
     if(sourceName=="LifeHacker")
         img=getImageLink(item,'<img src="','" />');
     if(sourceName=="JDG")
