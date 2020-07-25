@@ -28,7 +28,7 @@ export default function News({filteredNews}) {
         </TableHead>
         <TableBody>
           {sortedNews.map(n => (
-            <TableRow key={n.guid}>
+            <TableRow key={n.link}>
             <Hidden smDown>
               <TableCell><img src={n.image_link} height="40" width="40" alt=""/></TableCell>
               <TableCell>{n.source} <br/> <small>{n.time}</small></TableCell>

@@ -61,7 +61,7 @@ export default function Keywords({news, filters, setFilters, setFiltered}) {
       <Title>Keywords</Title>
       <p>
       {rawKeywords.map((k,i) => (
-        <React.Fragment>
+        <React.Fragment key={k.word}>
         <IconButton aria-label="add" size="small" variant="contained" onClick={()=>handleKeywordAdd(k.word)}>
           <AddIcon fontSize="inherit" />
         </IconButton>

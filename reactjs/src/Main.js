@@ -39,11 +39,12 @@ var config = {
   //server : "http://localhost:8529", // local
   server : "https://athena.slapps.fr",
   //dbUrl : "/_db/_system/hephaistos" // local
-  dbUrl : "/_db/production/apollo"
+  dbUrl : "/_db/production/apollo",
+  usersDbUrl : "/_db/production/athena",
 }
 
 function getUser(user,cb){
-  var q = config.server+config.dbUrl+"/users/"+user.sub
+  var q = config.server+config.usersDbUrl+"/users/"+user.sub
   console.log(q)
   fetch(q)
       .then(result=>result.json())
@@ -58,7 +59,7 @@ function getUser(user,cb){
       });
 }
 function createUser(user,cb){
-  var q = config.server+config.dbUrl+"/users/"
+  var q = config.server+config.usersDbUrl+"/users/"
   console.log(q)
   fetch(q,{
     method:'POST',
@@ -97,7 +98,8 @@ function getNews(cb){
   //TODO GOOD
   var e = end.toISOString();
   //console.log("e:"+e);
-  var q = "https://apollo-loopback.slapps.fr/api/News?filter[where][and][0][datetime][gt]="+s+"&filter[where][and][1][datetime][lt]="+e
+  //var q = "https://apollo-loopback.slapps.fr/api/News?filter[where][and][0][datetime][gt]="+s+"&filter[where][and][1][datetime][lt]="+e
+  var q = config.server+config.dbUrl+"/news";
   console.log(q)
   fetch(q)
       .then(result=>result.json())
