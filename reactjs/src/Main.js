@@ -46,7 +46,7 @@ var config = {
 
 function getUser(user,cb){
   var q = config.server+config.usersDbUrl+"/users/"+user.sub
-  console.log(q)
+  //console.log(q)
   fetch(q)
       .then(result=>result.json())
       .then(u=>{
@@ -80,7 +80,7 @@ function createUser(user,cb){
 
 function updateUser(user){
   var q = config.server+config.usersDbUrl+"/users/"+user._key
-  console.log(q)
+  //console.log(q)
   fetch(q,{
     method:'PUT',
     headers: {
@@ -90,7 +90,7 @@ function updateUser(user){
   })
       .then(result=>result.json())
       .then(u=>{
-          console.log(u);
+          //console.log(u);
           console.log("User updated");
       });
 }
@@ -103,12 +103,19 @@ function processNews(news){
 
 function getSources(cb){
   var q = config.server+config.dbUrl+"/sources"
-  console.log(q)
+  //console.log(q)
   fetch(q)
       .then(result=>result.json())
       .then(sources=>{
+          //var s = []
+          //sources.forEach(source => {
+          //  s.push({
+          //    name:source.name,
+          //    language:source.language
+          //  })
+          //})
           cb(sources);
-          //console.log(u);
+          //console.log(s);
       });
 }
 
@@ -130,7 +137,7 @@ function getNews(cb){
   //console.log("e:"+e);
   //var q = "https://apollo-loopback.slapps.fr/api/News?filter[where][and][0][datetime][gt]="+s+"&filter[where][and][1][datetime][lt]="+e
   var q = config.server+config.dbUrl+"/news";
-  console.log(q)
+  //console.log(q)
   fetch(q)
       .then(result=>result.json())
       .then(titles=>{
@@ -246,14 +253,14 @@ export default function Main({url}) {
   const [user, setUser] = React.useState({_key:0});
   const [sources, setSources] = React.useState([]);
   const [news, setNews] = React.useState([])
-  const [filtered, setFiltered] = React.useState(false)
-  const [filteredNews, setFilteredNews] = React.useState([])
+  const [sourcesFiltered, setSourcesFiltered] = React.useState(false)
+  const [keywordsFiltered, setKeywordsFiltered] = React.useState(false)
+  const [keywordsFilteredNews, setKeywordsFilteredNews] = React.useState([])
+  const [sourcesFilteredNews, setSourcesFilteredNews] = React.useState([])
   const [filters, setFilters] = React.useState({
     //TODO - Sources per user
-    sources:[],
     keywords:[],
-    noKeywords:[],
-    topics:[]
+    noKeywords:[]
   })
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -261,6 +268,50 @@ export default function Main({url}) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const filterBySources = (news, sources) => {
+    var sourcesFilteredNews = [];
+    news.forEach(n =>{
+      //console.log(t.source);
+      if(sources.indexOf(n.source)!==-1)
+        sourcesFilteredNews.push(n)
+    })
+    return sourcesFilteredNews;
+  }
+
+  const filterByKeywords = (news, keywords, noKeywords) => {
+    var keywordsFilteredNews = [];
+    news.forEach(n =>{
+      //console.log(t.source);
+      //if (filters.sources.indexOf(n.source)===-1)
+      //  return false
+      if(keywords.length===0 && noKeywords.length===0){
+        keywordsFilteredNews.push(n)
+        return false
+      }
+      var split = n.title.split(" ");
+
+      //if(split.indexOf("trump")===-1)
+      //  return false
+      //console.log(split);
+      var intersectionNoKeywords = split.filter(x => {
+        if(noKeywords.indexOf(x) != -1)
+      		return true;
+      	else
+      		return false;
+      })
+      if(intersectionNoKeywords.length>0)
+        return false;
+      if(keywords.length===0){
+        keywordsFilteredNews.push(n);
+        return false;
+      }
+      if(split.indexOf(keywords[0])!==-1)
+        keywordsFilteredNews.push(n);
+    })
+    return keywordsFilteredNews;
+  }
+
   //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   //console.log(authState.isAuthenticated);
   if (authState.isPending) {
@@ -286,80 +337,48 @@ export default function Main({url}) {
           setUser(u)
           getSources(setSources);
           getNews(setNews);
-          var sources = [];
-          if(!u.sources || u.sources.length==0)
-            sources = ["BBC","ABC"];
-          else
-            sources = u.sources
-          var f = Object.assign(filters, {sources: sources})
-          setFilters(f);
+          console.log("TOPICS")
+          console.log(u.topics)
         });
         //setUser(info)
       });
     }
   //console.log(filteredNews);
-  console.log(filters);
-  if(!filtered && news.length!==0){
-    setFiltered(true);
-    var f = [];
-    console.log("news");
-    console.log(news);
-    news.forEach(n =>{
-      //console.log(t.source);
-      if(filters.sources.indexOf(n.source)!==-1)
-        f.push(n)
-    })
-    setFilteredNews(f);
-    console.log(f);
+  //console.log(filters);
+  if(news.length!==0 && !sourcesFiltered){
+
+    setSourcesFilteredNews([])
+    setKeywordsFilteredNews([])
+    setSourcesFiltered(true);
+    var f = filterBySources(news, user.sources);
+    setSourcesFilteredNews(f);
+    setKeywordsFilteredNews(f);
+    console.log("Sources filtered")
+    console.log(f.length);
+    //console.log(f);
   }
 
   //FILTER
-  console.log(filtered);
-  console.log(filteredNews.length);
-  if(!filtered && filteredNews.length!==0){
-    setFiltered(true);
-    var f = [];
-    console.log(news);
-    console.log("filtered news");
-    news.forEach(n =>{
-      //console.log(t.source);
-      if (filters.sources.indexOf(n.source)===-1)
-        return false
-      if(filters.keywords.length===0 && filters.noKeywords.length===0){
-        f.push(n)
-        return false
-      }
-      var split = n.title.split(" ");
-
-      //if(split.indexOf("trump")===-1)
-      //  return false
-      //console.log(split);
-      var intersectionNoKeywords = split.filter(x => {
-        if(filters.noKeywords.indexOf(x) != -1)
-      		return true;
-      	else
-      		return false;
-      })
-      if(intersectionNoKeywords.length>0)
-        return false;
-      if(filters.keywords.length===0){
-        f.push(n);
-        return false;
-      }
-      if(split.indexOf(filters.keywords[0])!==-1)
-        f.push(n);
-    })
-    setFilteredNews(f);
-    console.log(f);
+  //console.log(sourcesFiltered);
+  //console.log(sourcesFilteredNews.length);
+  if(!keywordsFiltered){
+    setKeywordsFilteredNews([])
+    setKeywordsFiltered(true);
+    var f = filterByKeywords(sourcesFilteredNews, filters.keywords, filters.noKeywords);
+    //console.log(news);
+    //console.log("filtered news");
+    setKeywordsFilteredNews(f);
+    console.log("Keywords filtered")
+    console.log(f.length);
   }
   //console.log(url)
   var content = null;
   if(url==="profile")
     content = <Profile user={user} setUser={setUser} updateUser={updateUser}/>
   if(url==="sources")
-    content = <Sources user={user} setUser={setUser} sources={sources} setFilters={setFilters} filters={filters} setFiltered={setFiltered} updateUser={updateUser}/>
+    content = <Sources user={user} setUser={setUser} sources={sources} setSourcesFiltered={setSourcesFiltered} setKeywordsFiltered={setKeywordsFiltered} updateUser={updateUser}/>
   if(url==="dashboard")
-    content = <Dashboard news={news} filteredNews={filteredNews} setFilters={setFilters} filters={filters} setFiltered={setFiltered}/>
+    content = <Dashboard user={user} updateUser={updateUser} setUser={setUser} sourcesFilteredNews={sourcesFilteredNews} keywordsFilteredNews={keywordsFilteredNews} setFilters={setFilters} filters={filters} setKeywordsFiltered={setKeywordsFiltered}/>
 
   //console.log(fetch);
   return (

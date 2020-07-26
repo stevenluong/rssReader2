@@ -9,12 +9,32 @@ import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 import Hidden from '@material-ui/core/Hidden';
 
-export default function News({filteredNews}) {
+export default function News({user, updateUser, setUser, keywordsFilteredNews}) {
   //var cleanedNews = props.news;
-  var sortedNews = filteredNews.sort((a,b)=>(new Date(b.datetime))-(new Date(a.datetime)))
+  var sortedNews = keywordsFilteredNews.sort((a,b)=>(new Date(b.datetime))-(new Date(a.datetime)))
   const imgStyle = {
     "objectFit": "cover",
   };
+  const handleLinkClick = (n) => {
+    console.log(n);
+    var t = {};
+    if(user.topics)
+      t = user.topics;
+    var s = n.title.split(" ");
+    s.forEach(w => {
+      if(w.length<4)
+        return false;
+      console.log(w);
+      if(w in t)
+        t[w] = t[w]+1;
+      else
+        t[w] = 1
+    })
+    console.log(t);
+    var u = Object.assign(user, {topics:t})
+    setUser(u);
+    updateUser(u);
+  }
   //console.log(sortedNews)
   return (
     <React.Fragment>
@@ -36,7 +56,7 @@ export default function News({filteredNews}) {
               <TableCell><img style={imgStyle} src={n.image_link} height="40" width="40" alt=""/></TableCell>
               <TableCell>{n.source} <br/> <small>{n.time}</small></TableCell>
             </Hidden>
-              <TableCell><Link href={n.link}>{n.title} </Link></TableCell>
+              <TableCell><Link href={n.link} target="_blank" rel="noopener noreferrer" onClick={()=>handleLinkClick(n)}>{n.title} </Link></TableCell>
             </TableRow>
           ))}
         </TableBody>

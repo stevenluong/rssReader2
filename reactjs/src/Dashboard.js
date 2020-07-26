@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Dashboard({news, filteredNews, filters, setFilters, setFiltered}) {
+export default function Dashboard({user, updateUser, setUser, sourcesFilteredNews, keywordsFilteredNews, filters, setFilters, setKeywordsFiltered}) {
   const classes = useStyles();
   const paper = clsx(classes.paper);
 
@@ -35,7 +35,7 @@ export default function Dashboard({news, filteredNews, filters, setFilters, setF
     <Grid container direction="row" spacing={3}>
       <Grid item xs={12} md={9} lg={9}>
         <Paper className={classes.paper}>
-          <News news={news} filteredNews={filteredNews}/>
+          <News user={user} updateUser={updateUser} setUser={setUser} keywordsFilteredNews={keywordsFilteredNews}/>
         </Paper>
       </Grid>
       <Grid item xs={12} md={3} lg={3}>
@@ -44,7 +44,7 @@ export default function Dashboard({news, filteredNews, filters, setFilters, setF
         </Paper>
         <br/>
         <Paper className={paper}>
-          <Keywords filteredNews={filteredNews} filters={filters} setFilters={setFilters} setFiltered={setFiltered}/>
+          <Keywords sourcesFilteredNews={sourcesFilteredNews} keywordsFilteredNews={keywordsFilteredNews} filters={filters} setFilters={setFilters} setKeywordsFiltered={setKeywordsFiltered}/>
         </Paper>
       </Grid>
     </Grid>

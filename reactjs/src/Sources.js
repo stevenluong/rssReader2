@@ -19,36 +19,38 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Sources({user,setUser, sources,filters, setFilters, setFiltered, updateUser}) {
+export default function Sources({user,setUser, sources, setSourcesFiltered, setKeywordsFiltered, updateUser}) {
   const classes = useStyles();
   //var keywords = {}
-  var userSources = user.sources;
-  //const [userSources, setUserSources] = React.useState([]);
-  //setUserSources(user.sources);
-  console.log(user);
-  const handleSourceChange = (s) => {
+  //var userSources = user.sources;
+  //if(sources)
+
+  const handleSourceChange = (user,s) => {
     //var f = filters;
-    //console.log(s);
+    console.log(s);
     //console.log(userSources.indexOf(s.name));
-    if(userSources.indexOf(s.name)==-1){
-      userSources.push(s.name)
+    if(user.sources.indexOf(s.name)==-1){
+      user.sources.push(s.name)
     }else{
-      userSources.splice(userSources.indexOf(s.name),1)
+      user.sources.splice(user.sources.indexOf(s.name),1)
     }
     //user.sources=userSources;
-    //console.log(user.sources);
+    console.log(user.sources);
     //console.log(userSources);
-    var u = Object.assign(user, {sources:userSources})
-    updateUser(u);
+    var u = Object.assign(user, {sources:user.sources})
     setUser(u);
-    setFiltered(false);
+    updateUser(u);
+    //var s = Object.assign(sources)
+    //setSources(s);
+    //var f = Object.assign(filters, {sources: userSources})
+    //setFilters(f);
+    //console.log(f);
+    setSourcesFiltered(false);
+    //setKeywordsFiltered(false);
     //var f = Object.assign(filters, {keywords:[...filters.keywords,k]})
     //var f = Object.assign(filters, {sources:userSources})
     //setFilters(f);
     //setFiltered(false);
-  }
-  const checked = (s) => {
-    return userSources.indexOf(s.name)!=-1
   }
 
   //console.log(keywords);
@@ -61,9 +63,9 @@ export default function Sources({user,setUser, sources,filters, setFilters, setF
       {sources.map((s,i) => (
         <React.Fragment key={s.name}>
         <Checkbox
-         checked={checked(s)}
+         checked={user.sources.indexOf(s.name)!=-1}
          color="primary"
-         onClick={()=>handleSourceChange(s)}
+         onClick={()=>handleSourceChange(user,s)}
         />
         {s.name} - {s.language}
         <br/>
