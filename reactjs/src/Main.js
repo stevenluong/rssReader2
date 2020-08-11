@@ -262,6 +262,7 @@ export default function Main({url}) {
     keywords:[],
     noKeywords:[]
   })
+  //const [lastVisitSet, setLastVisitSet] = React.useState(false)
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -335,6 +336,14 @@ export default function Main({url}) {
         getUser(info, (u)=>{
           console.log(u)
           setUser(u)
+
+          //if(!lastVisitSet){
+          //  console.log("LAST VISIT")
+          //  setLastVisitSet(true)
+            var now = moment();
+            var u2 = Object.assign(u, {lastVisit:now})
+            updateUser(u2);
+          //}
           getSources(setSources);
           getNews(setNews);
           console.log("TOPICS")
