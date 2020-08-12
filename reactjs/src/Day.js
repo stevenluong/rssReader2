@@ -18,13 +18,17 @@ const useStyles = makeStyles({
 
 export default function Day({user}) {
   const classes = useStyles();
+  //console.log(user)
+  var lastVisit = moment();
+  if(user.visits && user.visits.length>=3)
+    lastVisit = user.visits[user.visits.length-3];
   return (
     <React.Fragment>
       <Title>{moment().format("DD/MM/YYYY")}</Title>
       <Typography color="textSecondary" className={classes.depositContext}>
         Updated on {moment().format("DD/MM/YYYY HH:00")}
         <br/>
-        Last visit on {moment(user.lastVisit).format("DD/MM/YYYY HH:mm")}
+        Last visit on {moment(lastVisit).format("DD/MM/YYYY HH:mm")}
       </Typography>
     </React.Fragment>
   );
