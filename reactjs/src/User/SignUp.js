@@ -59,6 +59,7 @@ const SignUp = ({baseUrl}) => {
   const [lastName, setLastName] = React.useState('');
   const [sessionToken, setSessionToken] = React.useState(null);
   const [country, setCountry] = React.useState('');
+  const APP = "apollo";
   const signup = (e) =>{
     e.preventDefault();
     const oktaAuth = new OktaAuth({ url: baseUrl });
@@ -68,12 +69,12 @@ const SignUp = ({baseUrl}) => {
           'Content-Type': 'application/json',
           //mode: 'no-cors'
         },
-        body: JSON.stringify({firstName,lastName, email, password, country})
+        body: JSON.stringify({firstName,lastName, email, password, country, APP})
       })
         .then(res => {
           console.log(res);
           if(res.status&&res.status===400)
-            setError(res.statusText)
+            setError("Error while signing up - "+res.statusText)
           oktaAuth
             .signIn({
               username: email,
@@ -84,7 +85,7 @@ const SignUp = ({baseUrl}) => {
             });
         })
         .catch(err => {
-          setError(err.message)
+          setError("Error while signing up - "+err.message)
           console.log(err)
         });
   };
@@ -174,7 +175,7 @@ const SignUp = ({baseUrl}) => {
                 onChange={handlePasswordChange}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} hidden={true}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I agree to I want to receive updates by email from Steven Luong. I consent Steven Luong processing my personal data. I understand that I can withdraw my consent at any time."
