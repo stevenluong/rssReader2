@@ -335,14 +335,16 @@ export default function Main({url}) {
         //console.log(info);
         getUser(info, (u)=>{
           console.log(u)
+          if(!u.sources)
+            u.sources = [];
           setUser(u)
 
           //if(!lastVisitSet){
           //  console.log("LAST VISIT")
           //  setLastVisitSet(true)
-            var now = moment();
-            var u2 = Object.assign(u, {lastVisit:now})
-            updateUser(u2);
+          var now = moment();
+          var u2 = Object.assign(u, {lastVisit:now})
+          updateUser(u2);
           //}
           getSources(setSources);
           getNews(setNews);
