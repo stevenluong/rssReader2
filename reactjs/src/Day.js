@@ -20,8 +20,8 @@ export default function Day({user}) {
   const classes = useStyles();
   //console.log(user)
   var lastVisit = moment();
-  if(user.visits && user.visits.length>=3)
-    lastVisit = user.visits[user.visits.length-3];
+  if(user.visits && user.visits.length>=2)
+    lastVisit = user.visits[user.visits.length-2];
   return (
     <React.Fragment>
       <Title>{moment().format("DD/MM/YYYY")}</Title>
