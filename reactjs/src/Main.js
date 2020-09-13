@@ -22,6 +22,7 @@ import logo from './Common/logo.png';
 
 import Profile from './User/Profile';
 import Sources from './Sources';
+import Topics from './Topics';
 import Dashboard from './Dashboard';
 
 import ListItem from '@material-ui/core/ListItem';
@@ -394,6 +395,8 @@ export default function Main({url}) {
     content = <Profile user={user} setUser={setUser} updateUser={updateUser}/>
   if(url==="sources")
     content = <Sources user={user} setUser={setUser} sources={sources} setSourcesFiltered={setSourcesFiltered} setKeywordsFiltered={setKeywordsFiltered} updateUser={updateUser}/>
+  if(url==="topics")
+    content = <Topics user={user}/>
   if(url==="dashboard")
     content = <Dashboard user={user} updateUser={updateUser} setUser={setUser} sourcesFilteredNews={sourcesFilteredNews} keywordsFilteredNews={keywordsFilteredNews} setFilters={setFilters} filters={filters} setKeywordsFiltered={setKeywordsFiltered}/>
 

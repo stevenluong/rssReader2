@@ -56,7 +56,7 @@ export default function Sources({user,setUser, sources, setSourcesFiltered, setK
   //console.log(keywords);
   return (
     <Grid container>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={12} lg={12}>
       <Paper className={classes.paper}>
       <Title>Sources</Title>
       <div>

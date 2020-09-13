@@ -27,6 +27,7 @@ const AppWithRouterAccess = () => {
         <Route path='/implicit/callback' component={LoginCallback} />
         <SecureRoute path='/profile' render={() => <Main url="profile" />} />
         <SecureRoute path='/sources' render={() => <Main url="sources" />} />
+        <SecureRoute path='/topics' render={() => <Main url="topics" />} />
         <Route component={Notfound} />
       </Switch>
     </Security>

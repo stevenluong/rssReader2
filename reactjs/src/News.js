@@ -35,7 +35,7 @@ export default function News({user, updateUser, setUser, keywordsFilteredNews}) 
     setUser(u);
     updateUser(u);
   }
-  //console.log(sortedNews)
+  console.log(user.visits)
   return (
     <React.Fragment>
       <Title id="news">News</Title>
@@ -56,7 +56,7 @@ export default function News({user, updateUser, setUser, keywordsFilteredNews}) 
               <TableCell><img style={imgStyle} src={n.image_link} height="40" width="40" alt=""/></TableCell>
               <TableCell>{n.source} <br/> <small>{n.time}</small></TableCell>
             </Hidden>
-              <TableCell> {user.lastVisit<n.datetime?"NEW - ":""} <Link href={n.link} target="_blank" rel="noopener noreferrer" onClick={()=>handleLinkClick(n)}>{n.title} </Link></TableCell>
+              <TableCell> <Link href={n.link} target="_blank" rel="noopener noreferrer" onClick={()=>handleLinkClick(n)}>{n.title} </Link></TableCell>
             </TableRow>
           ))}
         </TableBody>
