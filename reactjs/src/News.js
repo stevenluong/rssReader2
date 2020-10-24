@@ -38,7 +38,7 @@ export default function News({user, updateUser, setUser, keywordsFilteredNews}) 
   console.log(user.visits)
   return (
     <React.Fragment>
-      <Title id="news">News</Title>
+      <Title id="news">News ({sortedNews.length})</Title>
       <Table size="small">
         <TableHead>
           <TableRow>

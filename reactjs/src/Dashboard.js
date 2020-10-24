@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
+import Search from './Search';
 import Keywords from './Keywords';
 import Day from './Day';
 import News from './News';
@@ -41,6 +42,10 @@ export default function Dashboard({user, updateUser, setUser, sourcesFilteredNew
       <Grid item xs={12} md={3} lg={3}>
         <Paper className={paper}>
           <Day user={user}/>
+        </Paper>
+        <br/>
+        <Paper className={paper}>
+          <Search sourcesFilteredNews={sourcesFilteredNews} keywordsFilteredNews={keywordsFilteredNews} filters={filters} setFilters={setFilters} setKeywordsFiltered={setKeywordsFiltered}/>
         </Paper>
         <br/>
         <Paper className={paper}>
