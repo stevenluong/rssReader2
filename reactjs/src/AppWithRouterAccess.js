@@ -28,6 +28,7 @@ const AppWithRouterAccess = () => {
         <SecureRoute path='/profile' render={() => <Main url="profile" />} />
         <SecureRoute path='/sources' render={() => <Main url="sources" />} />
         <SecureRoute path='/topics' render={() => <Main url="topics" />} />
+        <SecureRoute path='/analytics' render={() => <Main url="analytics" />} />
         <Route component={Notfound} />
       </Switch>
     </Security>

@@ -23,6 +23,7 @@ import logo from './Common/logo.png';
 import Profile from './User/Profile';
 import Sources from './Sources';
 import Topics from './Topics';
+import Analytics from './Analytics'
 import Dashboard from './Dashboard';
 
 import ListItem from '@material-ui/core/ListItem';
@@ -34,6 +35,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import TripOriginIcon from '@material-ui/icons/TripOrigin';
 import LayersIcon from '@material-ui/icons/Layers';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
+import BubbleChartIcon from '@material-ui/icons/BubbleChart';
 
 import moment from 'moment';
 
@@ -64,7 +66,7 @@ function getUser(user,cb){
 
 function createUser(user,cb){
   var q = config.server+config.usersDbUrl+"/users/"
-  console.log(q)
+  //console.log(q)
   fetch(q,{
     method:'POST',
     headers: {
@@ -92,13 +94,27 @@ function updateUser(user){
       .then(result=>result.json())
       .then(u=>{
           //console.log(u);
-          console.log("User updated");
+          //console.log("User updated");
       });
 }
 function processNews(news){
-  var processedNews = news;
+  var processedNews = [];
   var seen = {}
-  processedNews = news.filter((item)=> {return seen.hasOwnProperty(item.title)?false:(seen[item.title]=true)})
+  //SEEN
+  //processedNews = news.filter((item)=> {return seen.hasOwnProperty(item.title)?false:(seen[item.title]=true)})
+  //HTTPS
+  //processedNews = news.filter((item)=> {return item.tile.indexOf("https")?false:(seen[item.title]=true)})
+  news.forEach(n=>{
+    if(n.link.indexOf("https")==-1){
+      n.link=n.link.replace("http:","https:");
+      //console.log(n.link);
+    }
+    if(n.image_link && n.image_link.indexOf("https")==-1){
+      n.image_link=n.image_link.replace("http:","https:");
+      //console.log(n.image_link);
+    }
+    processedNews.push(n);
+  })
   return processedNews;
 }
 
@@ -335,7 +351,7 @@ export default function Main({url}) {
         //setUserInfo(info);
         //console.log(info);
         getUser(info, (u)=>{
-          console.log(u)
+          //console.log(u)
           //INIT
           if(!u.sources)
             u.sources = [];
@@ -343,20 +359,20 @@ export default function Main({url}) {
           //  console.log("LAST VISIT")
           //  setLastVisitSet(true)
           //VISITS
-          console.log("VISITS");
+          //console.log("VISITS");
           var now = moment();
           if(!u.visits)
             u.visits = [];
           u = Object.assign(u, {visits:[...u.visits,now.toString()]})
-          console.log(u.visits);
+          //console.log(u.visits);
           //var u2 = Object.assign(u, {visits:[..]})
           updateUser(u);
           setUser(u)
           //}
           getSources(setSources);
           getNews(setNews);
-          console.log("TOPICS")
-          console.log(u.topics)
+          //console.log("TOPICS")
+          //console.log(u.topics)
         });
         //setUser(info)
       });
@@ -371,8 +387,8 @@ export default function Main({url}) {
     var f = filterBySources(news, user.sources);
     setSourcesFilteredNews(f);
     setKeywordsFilteredNews(f);
-    console.log("Sources filtered")
-    console.log(f.length);
+    //console.log("Sources filtered")
+    //console.log(f.length);
     //console.log(f);
   }
 
@@ -386,8 +402,8 @@ export default function Main({url}) {
     //console.log(news);
     //console.log("filtered news");
     setKeywordsFilteredNews(f);
-    console.log("Keywords filtered")
-    console.log(f.length);
+    //console.log("Keywords filtered")
+    //console.log(f.length);
   }
   //console.log(url)
   var content = null;
@@ -397,6 +413,8 @@ export default function Main({url}) {
     content = <Sources user={user} setUser={setUser} sources={sources} setSourcesFiltered={setSourcesFiltered} setKeywordsFiltered={setKeywordsFiltered} updateUser={updateUser}/>
   if(url==="topics")
     content = <Topics user={user}/>
+  if(url==="analytics")
+    content = <Analytics user={user}/>
   if(url==="dashboard")
     content = <Dashboard user={user} updateUser={updateUser} setUser={setUser} sourcesFilteredNews={sourcesFilteredNews} keywordsFilteredNews={keywordsFilteredNews} setFilters={setFilters} filters={filters} setKeywordsFiltered={setKeywordsFiltered}/>
 
@@ -447,11 +465,17 @@ export default function Main({url}) {
               <ListItemText primary="Dashboard" />
             </ListItem>
             <ListItem button component={RouterLink} to="/topics">
-            <ListItemIcon>
-              <BookmarkIcon />
-            </ListItemIcon>
-            <ListItemText primary="Topics" />
-          </ListItem>
+              <ListItemIcon>
+                <BookmarkIcon />
+              </ListItemIcon>
+              <ListItemText primary="Topics" />
+            </ListItem>
+            <ListItem button component={RouterLink} to="/analytics">
+              <ListItemIcon>
+                <BubbleChartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Analytics" />
+            </ListItem>
         </div>
         </List>
         <Divider />

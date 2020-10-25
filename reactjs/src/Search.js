@@ -11,14 +11,19 @@ import BackspaceIcon from '@material-ui/icons/Backspace';
 import BackspaceOutlinedIcon from '@material-ui/icons/BackspaceOutlined';
 import { createMuiTheme, withStyles, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 
-export default function Search({keywordsFilteredNews, sourcesFilteredNews, filters, setFilters, setKeywordsFiltered}) {
+export default function Search({filters, setFilters, setKeywordsFiltered}) {
   //var search = {}
   const handleSearchChange = (search) => {
-    var f = Object.assign(filters, {keywords:[search],noKeywords:[]})
+    var f = {}
+    if(search!=="")
+      f = Object.assign(filters, {keywords:[search],noKeywords:[]})
+    else
+      f = Object.assign(filters, {keywords:[],noKeywords:[]})
     console.log(f)
     console.log(search)
     setFilters(f);
     setKeywordsFiltered(false);
+
   }
 
   //console.log(keywords);

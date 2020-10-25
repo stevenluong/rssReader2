@@ -9,8 +9,6 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import BackspaceIcon from '@material-ui/icons/Backspace';
-import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -21,37 +19,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Topics({user}) {
+export default function Analytics({user}) {
   const classes = useStyles();
   //var keywords = {}
   //var userSources = user.sources;
   //if(sources)
   //console.log(user)
   //var topics = {"test":3};
-  var topics = ["a","b","c","d"]
-  const handleRemoveTopic = (topic) => {
-    //var f = filters;
-    if(topics.indexOf(topic)!=-1)
-      topics.splice(topics.indexOf(topic),1)
+  var allTopics = []
+  var sortedTopics = []
+  var topics = {}
+  if(user.topics){
+    topics = user.topics;
   }
-  const handleAddTopic = (e) => {
-    console.log(e.target.value)
-    if(e.keyCode == 13)
-    //var f = filters;
-    if(topics.indexOf(e.target.value)!=-1)
-      topics.push(e.target.value)
-  }
-  console.log(topics);
-  //if(user.topics){
-  //  topics = user.topics;
-  //}
-  //Object.keys(topics).forEach(t=>{
-  //  allTopics.push({
-  //    topic:t,
-  //    count:topics[t]
-  //  })
-  //})
-  //sortedTopics = allTopics.sort((a,b) => (b.count-a.count))
+  Object.keys(topics).forEach(t=>{
+    allTopics.push({
+      topic:t,
+      count:topics[t]
+    })
+  })
+  sortedTopics = allTopics.sort((a,b) => (b.count-a.count))
   //topics = user.topics;
   //var sortedTopics = []
 
@@ -61,22 +48,14 @@ export default function Topics({user}) {
     <Grid container>
       <Grid item xs={12} md={12} lg={12}>
       <Paper className={classes.paper}>
-      <Title>Topics</Title>
+      <Title>Analytics</Title>
       <div>
-      {topics.map((t) => (
-        <React.Fragment key={t}>
-        {t}
-        <IconButton
-        size="small"
-        onClick={()=>handleRemoveTopic(t)}
-        >
-        <BackspaceIcon/>
-        </IconButton>
-
+      {sortedTopics.map(t => (
+        <React.Fragment key={t.topic}>
+        {t.topic} - {t.count}
         <br/>
         </React.Fragment>
       ))}
-      <TextField label="Add" variant="outlined" onKeyPress={(e)=>handleAddTopic(e)}/>
       </div>
 
       </Paper>

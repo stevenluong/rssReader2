@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 import Hidden from '@material-ui/core/Hidden';
+import VerticalAlignTopIcon from '@material-ui/icons/VerticalAlignTop';
 
 export default function News({user, updateUser, setUser, keywordsFilteredNews}) {
   //var cleanedNews = props.news;
@@ -15,6 +16,9 @@ export default function News({user, updateUser, setUser, keywordsFilteredNews}) 
   const imgStyle = {
     "objectFit": "cover",
   };
+  var latestNews ={};
+  if(user.latestNews)
+    latestNews = user.latestNews;
   const handleLinkClick = (n) => {
     console.log(n);
     var t = {};
@@ -30,33 +34,39 @@ export default function News({user, updateUser, setUser, keywordsFilteredNews}) 
       else
         t[w] = 1
     })
-    console.log(t);
+    //console.log(t);
     var u = Object.assign(user, {topics:t})
+    if(!user.latestNews || user.latestNews.datetime<n.datetime)
+      u.latestNews = n
+    console.log(u);
     setUser(u);
     updateUser(u);
   }
-  console.log(user.visits)
+  //console.log(user.visits)
   return (
     <React.Fragment>
       <Title id="news">News ({sortedNews.length})</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
-          <Hidden smDown>
+          <Hidden xlDown>
             <TableCell>Image</TableCell>
-            <TableCell>Source</TableCell>
           </Hidden>
+            <TableCell>Time-Source</TableCell>
             <TableCell>Title</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {sortedNews.map(n => (
             <TableRow key={n.link}>
-            <Hidden smDown>
+            <Hidden xlDown>
               <TableCell><img style={imgStyle} src={n.image_link} height="40" width="40" alt=""/></TableCell>
-              <TableCell>{n.source} <br/> <small>{n.time}</small></TableCell>
             </Hidden>
-              <TableCell> <Link href={n.link} target="_blank" rel="noopener noreferrer" onClick={()=>handleLinkClick(n)}>{n.title} </Link></TableCell>
+              <TableCell><small>{n.time}<br/>{n.source}</small></TableCell>
+              <TableCell>
+              <VerticalAlignTopIcon style={latestNews._id!=n._id?{display: 'none'}:{}}/>
+              <Link href={n.link} target="_blank" rel="noopener noreferrer" onClick={()=>handleLinkClick(n)}>{n.title} </Link>
+               </TableCell>
             </TableRow>
           ))}
         </TableBody>
