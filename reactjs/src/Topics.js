@@ -21,27 +21,41 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Topics({user}) {
+export default function Topics({user,setUser, updateUser, topics, setTopics}) {
   const classes = useStyles();
   //var keywords = {}
   //var userSources = user.sources;
   //if(sources)
   //console.log(user)
   //var topics = {"test":3};
-  var topics = ["a","b","c","d"]
+  var t = []
+  if(topics)
+    t = topics;
   const handleRemoveTopic = (topic) => {
     //var f = filters;
-    if(topics.indexOf(topic)!=-1)
-      topics.splice(topics.indexOf(topic),1)
+    if(t.indexOf(topic)!=-1){
+      t.splice(t.indexOf(topic),1)
+      setTopics(t);
+      var u = Object.assign(user, {topics:t})
+      setUser(u);
+      updateUser(u);
+    }
   }
   const handleAddTopic = (e) => {
-    console.log(e.target.value)
-    if(e.keyCode == 13)
+    console.log(e.keyCode)
+    if(e.keyCode == 13){
+      console.log("IN")
+      if(t.indexOf(e.target.value)==-1){
+        var tmp = t.push(e.target.value)
+        setTopics(tmp)
+        var u = Object.assign(user, {topics:t})
+        setUser(u);
+        updateUser(u);
+      }
+    }
     //var f = filters;
-    if(topics.indexOf(e.target.value)!=-1)
-      topics.push(e.target.value)
   }
-  console.log(topics);
+  console.log(user.topics);
   //if(user.topics){
   //  topics = user.topics;
   //}
@@ -63,12 +77,12 @@ export default function Topics({user}) {
       <Paper className={classes.paper}>
       <Title>Topics</Title>
       <div>
-      {topics.map((t) => (
+      {t.map((topic) => (
         <React.Fragment key={t}>
-        {t}
+        {topic}
         <IconButton
         size="small"
-        onClick={()=>handleRemoveTopic(t)}
+        onClick={()=>handleRemoveTopic(topic)}
         >
         <BackspaceIcon/>
         </IconButton>
@@ -76,7 +90,7 @@ export default function Topics({user}) {
         <br/>
         </React.Fragment>
       ))}
-      <TextField label="Add" variant="outlined" onKeyPress={(e)=>handleAddTopic(e)}/>
+      <TextField label="Add" variant="outlined" onKeyDown={(e)=>handleAddTopic(e)}/>
       </div>
 
       </Paper>

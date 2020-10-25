@@ -22,8 +22,8 @@ export default function News({user, updateUser, setUser, keywordsFilteredNews}) 
   const handleLinkClick = (n) => {
     console.log(n);
     var t = {};
-    if(user.topics)
-      t = user.topics;
+    if(user.interests)
+      t = user.interests;
     var s = n.title.split(" ");
     s.forEach(w => {
       if(w.length<4)
@@ -35,7 +35,7 @@ export default function News({user, updateUser, setUser, keywordsFilteredNews}) 
         t[w] = 1
     })
     //console.log(t);
-    var u = Object.assign(user, {topics:t})
+    var u = Object.assign(user, {interests:t})
     if(!user.latestNews || user.latestNews.datetime<n.datetime)
       u.latestNews = n
     console.log(u);

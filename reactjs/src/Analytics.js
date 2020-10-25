@@ -26,19 +26,19 @@ export default function Analytics({user}) {
   //if(sources)
   //console.log(user)
   //var topics = {"test":3};
-  var allTopics = []
-  var sortedTopics = []
-  var topics = {}
-  if(user.topics){
-    topics = user.topics;
+  var allInterests = []
+  var sortedInterests = []
+  var interests = {}
+  if(user.interests){
+    interests = user.interests;
   }
-  Object.keys(topics).forEach(t=>{
-    allTopics.push({
-      topic:t,
-      count:topics[t]
+  Object.keys(interests).forEach(i=>{
+    allInterests.push({
+      interest:i,
+      count:interests[i]
     })
   })
-  sortedTopics = allTopics.sort((a,b) => (b.count-a.count))
+  sortedInterests = allInterests.sort((a,b) => (b.count-a.count))
   //topics = user.topics;
   //var sortedTopics = []
 
@@ -50,9 +50,9 @@ export default function Analytics({user}) {
       <Paper className={classes.paper}>
       <Title>Analytics</Title>
       <div>
-      {sortedTopics.map(t => (
-        <React.Fragment key={t.topic}>
-        {t.topic} - {t.count}
+      {sortedInterests.map(i => (
+        <React.Fragment key={i.interest}>
+        {i.interest} - {i.count}
         <br/>
         </React.Fragment>
       ))}

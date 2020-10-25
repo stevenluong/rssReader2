@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Dashboard({user, updateUser, setUser, sourcesFilteredNews, keywordsFilteredNews, filters, setFilters, setKeywordsFiltered}) {
+export default function Dashboard({topics, setTopics, user, updateUser, setUser, sourcesFilteredNews, keywordsFilteredNews, filters, setFilters, setKeywordsFiltered}) {
   const classes = useStyles();
   const paper = clsx(classes.paper);
 
@@ -42,7 +42,7 @@ export default function Dashboard({user, updateUser, setUser, sourcesFilteredNew
         </Paper>
         <br/>
         <Paper className={paper}>
-          <DashboardTopics sourcesFilteredNews={sourcesFilteredNews} keywordsFilteredNews={keywordsFilteredNews} filters={filters} setFilters={setFilters} setKeywordsFiltered={setKeywordsFiltered}/>
+          <DashboardTopics topics={topics} sourcesFilteredNews={sourcesFilteredNews} keywordsFilteredNews={keywordsFilteredNews} filters={filters} setFilters={setFilters} setKeywordsFiltered={setKeywordsFiltered}/>
         </Paper>
         <br/>
         <Paper className={paper}>

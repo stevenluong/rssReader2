@@ -274,6 +274,7 @@ export default function Main({url}) {
   const [keywordsFiltered, setKeywordsFiltered] = React.useState(false)
   const [keywordsFilteredNews, setKeywordsFilteredNews] = React.useState([])
   const [sourcesFilteredNews, setSourcesFilteredNews] = React.useState([])
+  const [topics, setTopics] = React.useState([])
   const [filters, setFilters] = React.useState({
     //TODO - Sources per user
     keywords:[],
@@ -368,6 +369,11 @@ export default function Main({url}) {
           //var u2 = Object.assign(u, {visits:[..]})
           updateUser(u);
           setUser(u)
+          console.log("TOPICS")
+          var t = []
+          if(!u.topics)
+            t = u.topics;
+          setTopics(t)
           //}
           getSources(setSources);
           getNews(setNews);
@@ -412,11 +418,11 @@ export default function Main({url}) {
   if(url==="sources")
     content = <Sources user={user} setUser={setUser} sources={sources} setSourcesFiltered={setSourcesFiltered} setKeywordsFiltered={setKeywordsFiltered} updateUser={updateUser}/>
   if(url==="topics")
-    content = <Topics user={user}/>
+    content = <Topics topics={topics} setTopics={setTopics} user={user} setUser={setUser} updateUser={updateUser}/>
   if(url==="analytics")
     content = <Analytics user={user}/>
   if(url==="dashboard")
-    content = <Dashboard user={user} updateUser={updateUser} setUser={setUser} sourcesFilteredNews={sourcesFilteredNews} keywordsFilteredNews={keywordsFilteredNews} setFilters={setFilters} filters={filters} setKeywordsFiltered={setKeywordsFiltered}/>
+    content = <Dashboard topics={topics} user={user} updateUser={updateUser} setUser={setUser} sourcesFilteredNews={sourcesFilteredNews} keywordsFilteredNews={keywordsFilteredNews} setFilters={setFilters} filters={filters} setKeywordsFiltered={setKeywordsFiltered}/>
 
   //console.log(fetch);
   return (
