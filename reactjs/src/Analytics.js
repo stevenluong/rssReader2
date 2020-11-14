@@ -55,6 +55,7 @@ export default function Analytics() {
 
   //console.log(topics);
   //console.log(Object.keys(topics));
+  sortedInterests = sortedInterests.slice(0,100);
   return (
     <Grid container>
       <Grid item xs={12} md={12} lg={12}>
