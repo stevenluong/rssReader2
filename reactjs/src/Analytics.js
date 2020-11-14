@@ -1,5 +1,5 @@
 import React from 'react';
-import Title from './Title';
+import Title from './Common/Title';
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -10,6 +10,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
+//REDUX
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+
+
 const useStyles = makeStyles(theme => ({
   paper: {
     padding: theme.spacing(5),
@@ -19,26 +24,32 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Analytics({user}) {
+export default function Analytics() {
   const classes = useStyles();
+
+  //REDUX
+  const dispatch = useDispatch()
+  //const selectNews = state => state.news;
+  //const reduxNews = useSelector(selectNews);
+  //const selectSources = state => state.sources;
+  //const reduxSources = useSelector(selectSources);
+  const selectUser = state => state.user;
+  const reduxUser = useSelector(selectUser);
+
   //var keywords = {}
   //var userSources = user.sources;
   //if(sources)
   //console.log(user)
   //var topics = {"test":3};
-  var allInterests = []
+  //var allInterests = []
   var sortedInterests = []
-  var interests = {}
-  if(user.interests){
-    interests = user.interests;
-  }
-  Object.keys(interests).forEach(i=>{
-    allInterests.push({
-      interest:i,
-      count:interests[i]
-    })
-  })
-  sortedInterests = allInterests.sort((a,b) => (b.count-a.count))
+  //Object.keys(reduxUser.interests).forEach(i=>{
+  //  allInterests.push({
+  //    interest:i,
+  //    count:reduxUser.interests[i]
+  //  })
+  //})
+  sortedInterests = reduxUser.interests.sort((a,b) => (b.count-a.count))
   //topics = user.topics;
   //var sortedTopics = []
 
@@ -51,8 +62,8 @@ export default function Analytics({user}) {
       <Title>Analytics</Title>
       <div>
       {sortedInterests.map(i => (
-        <React.Fragment key={i.interest}>
-        {i.interest} - {i.count}
+        <React.Fragment key={i.word}>
+        {i.word} - {i.count}
         <br/>
         </React.Fragment>
       ))}
